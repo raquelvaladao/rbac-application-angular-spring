@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+.main-container 
+{
+    padding-top: 100px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    overflow: hidden;
+}
+
+.footer
+{
+    height: 50px;
+    text-align: center;
+}
+
+body {
+    background-color: #d4d4d4;
+}
+
+.red-snackbar {
+    background: #b81203;
+    color: whitesmoke;
+}
+
+.green-snackbar {
+    background: #178533;
+    color: whitesmoke;
+}
+
+.red-snackbar button {
+    background-color: transparent;
+    color: white !important;
+    border: none;
+}
+
+.green-snackbar button {
+    background-color: transparent;
+    color: white !important;
+    border: none;
+}

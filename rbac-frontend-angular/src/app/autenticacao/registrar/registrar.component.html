@@ -1,0 +1,89 @@
+<div class="container  justify-content-center mt-5 w-50">
+  <div class="card mb-5">
+    <div class="card-header">Cadastrar</div>
+ 
+    <div class="card-body">
+        
+        <form [formGroup]="form" (submit)="submit()">
+            <div class="mb-2">
+              <mat-form-field appearance="standard" class="full-width-field">
+                <mat-label>Nome</mat-label>
+                <input
+                  matInput
+                  placeholder="Nome"
+                  formControlName="nome"
+                  required
+                />
+                <mat-error *ngIf="form.get('nome')?.invalid">{{
+                  errosInput("nome")
+                }}</mat-error>
+              </mat-form-field>
+              <div *ngIf="!form.get('nome')?.invalid" class="text-success">
+                <small>Nome válido!</small>
+              </div>
+            </div>
+    
+            <div class="mb-2">
+              <mat-form-field appearance="standard" class="full-width-field">
+                <mat-label>CPF</mat-label>
+                <input
+                  matInput
+                  placeholder="Inserir CPF"
+                  formControlName="cpf"
+                  required
+                />
+                <mat-error *ngIf="form.get('cpf')?.invalid &&  this.form.get('cpf')?.touched">{{
+                  errosInput("cpf")
+                }}</mat-error>
+              
+              </mat-form-field>
+              <div *ngIf="cpfSucesso == true" class="text-success">
+                <small>CPF válido!</small>
+              </div>
+            </div>
+    
+            <div class="mb-2">
+              <mat-form-field appearance="standard" class="full-width-field">
+                <mat-label>Email</mat-label>
+                <input
+                  matInput
+                  placeholder="Inserir email"
+                  formControlName="login"
+                  required
+                />
+                <mat-error *ngIf="form.get('login')?.invalid">{{
+                  errosInput("login")
+                }}</mat-error>
+              </mat-form-field>
+              <div *ngIf="!form.get('login')?.invalid" class="text-success">
+                <small>Email válido!</small>
+              </div>
+            </div>
+    
+            <div class="mb-2">
+              <mat-form-field appearance="standard" class="full-width-field">
+                <mat-label>Senha</mat-label>
+                <input
+                  matInput
+                  placeholder="Inserir senha"
+                  formControlName="senha"
+                  type="password"
+                  required
+                />
+                <mat-error *ngIf="form.get('senha')?.invalid">{{
+                  errosInput("senha")
+                }}</mat-error>
+              </mat-form-field>
+              <div *ngIf="!form.get('senha')?.invalid" class="text-success">
+                <small>Senha válida!</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Enviar</button>
+          </form>
+
+    </div>
+ 
+   
+    
+  </div>
+</div>

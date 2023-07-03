@@ -1,0 +1,89 @@
+<div class="container d-flex justify-content-center mt-50 mb-50">
+  <h3 class="display-5 mb-2 text-center">Olá, {{userName}}.</h3>
+</div>
+<div *ngIf="isToken != null" class="album py-2 mt-2 mb-5">
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-5">
+        <div
+        (click)="navigateOnRole('overview')"
+          class="card mb-4 box-shadow shadow p-4 mb-3 rounded"
+          role="button"
+        >
+          <img
+            src="assets/overview.svg"
+            class="card-img-top"
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+            alt="Thumbnail [100%x225]"
+            style="height: 225px; width: 100%; display: block"
+            data-holder-rendered="true"
+          />
+
+          <div class="card-body">
+            <h3 class="card-title text-center">Overview</h3>
+            <a class="stretched-link"></a>
+          </div>
+        </div>
+      </div>
+      <div  *ngIf="this.roleStorage == 'admin'" class="col-md-5">
+        <div
+          (click)="navigateOnRole('criar')"
+          class="card mb-4 box-shadow shadow p-4 mb-3 rounded"
+        >
+          <img
+            src="assets/register.svg"
+            class="card-img-top"
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+            alt="Thumbnail [100%x225]"
+            style="height: 225px; width: 100%; display: block"
+            data-holder-rendered="true"
+          />
+          <div class="card-body">
+            <h3 class="card-title text-center">Criar usuário</h3>
+            <a class="stretched-link"></a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="this.roleStorage == 'admin'" class="col-md-5">
+        <div
+          (click)="navigateOnRole('relatorios/posicoes')"
+          class="card mb-4 box-shadow shadow p-4 mb-3 rounded"
+        >
+          <img
+            src="assets/report.svg"
+            class="card-img-top"
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+            alt="Thumbnail [100%x225]"
+            style="height: 225px; width: 100%; display: block"
+            data-holder-rendered="true"
+          />
+          <div class="card-body">
+            <h4 class="card-title text-center">Relatório de posições</h4>
+            <a class="stretched-link"></a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="this.roleStorage == 'admin'" class="col-md-5">
+        <div
+          (click)="navigateOnRole('relatorios/cidades')"
+          class="card mb-4 box-shadow shadow p-4 mb-3 rounded"
+        >
+          <img
+            src="assets/report.svg"
+            class="card-img-top"
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+            alt="Thumbnail [100%x225]"
+            style="height: 225px; width: 100%; display: block"
+            data-holder-rendered="true"
+          />
+          <div class="card-body">
+            <h4 class="card-title text-center">Relatório de cidades</h4>
+            <a class="stretched-link"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

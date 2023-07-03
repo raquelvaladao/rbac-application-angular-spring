@@ -1,0 +1,45 @@
+<div class="container d-flex justify-content-center mt-5">
+  <mat-card class="login-card">
+    <mat-card-header class="header">
+      <div class="header-background"></div>
+      <div class="logo-container">
+        <img class="logo mb-3" src="../../../assets/icmc_transp.png" alt="Logo">
+        <!-- <mat-card-title class="title">Login</mat-card-title> -->
+      </div>
+    </mat-card-header>
+    <mat-card-content class="content">
+      <form [formGroup]="form" (submit)="submit()" class="form">
+        <div class="mb-2">
+          <mat-form-field appearance="standard" class="full-width-field">
+            <mat-label>Usuário</mat-label>
+            <input
+              matInput
+              placeholder="Usuário"
+              formControlName="login"
+              required
+            />
+            <mat-error *ngIf="form.get('login')?.invalid">{{ errosInput("login") }}</mat-error>
+          </mat-form-field>
+        </div>
+  
+        <div class="mb-2">
+          <mat-form-field appearance="standard" class="full-width-field">
+            <mat-label>Senha</mat-label>
+            <input
+              matInput
+              placeholder="Senha"
+              formControlName="password"
+              type="password"
+              required
+            />
+            <mat-error *ngIf="form.get('password')?.invalid">{{ errosInput("password") }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="button-container">
+          <button type="submit" class="btn button-container mb-3">Login</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  
+</div>

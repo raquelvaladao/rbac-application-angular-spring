@@ -1,0 +1,42 @@
+.demo-table {
+  width: 100%;
+}
+
+.mat-column-demo-name {
+padding-left: 16px;
+font-size: 20px;
+}
+
+.mat-column-demo-symbol {
+width: 80px;
+text-align: center;
+font-weight: bold;
+font-size: 20px;
+}
+  
+.demo-toggles {
+display: flex;
+flex-direction: column;
+}
+
+.demo-toggles * {
+margin-bottom: 16px;
+}
+
+.demo-options {
+display: flex;
+flex-direction: column;
+width: 600px;
+}
+
+.demo-data * {
+  margin: 16px 0;
+}
+
+.demo-paginator {
+  width: 100%px;
+}
+
+div.mat-elevation-z8 {
+  width: 100%;
+}

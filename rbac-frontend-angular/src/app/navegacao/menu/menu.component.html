@@ -1,0 +1,24 @@
+<mat-toolbar color="primary">
+    <button mat-button [routerLink]="['/home']">
+      <mat-icon>outlined_flag</mat-icon>
+    </button> 
+      <span>FIA</span>
+    <button mat-button [routerLink]="['/home']">
+      <mat-icon>home</mat-icon>
+      Início
+    </button> 
+    <span class="flex-spacer"></span>
+
+    <button mat-button *ngIf="isToken == null" [routerLink]="['/login']">
+      <mat-icon>lock</mat-icon>
+      Login
+    </button> 
+    <button mat-button *ngIf="isToken != null">
+      <mat-icon>layers</mat-icon>
+      {{ role }}
+    </button>
+    <button mat-button *ngIf="isToken != null" [routerLink]="['/logout']">
+      <mat-icon>logout</mat-icon>
+      Sair
+    </button>
+</mat-toolbar>
