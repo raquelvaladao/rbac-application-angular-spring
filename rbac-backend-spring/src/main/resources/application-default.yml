@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  servlet:
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+  jackson:
+    mapper:
+      default-view-inclusion: true
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://database:5432/postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+    hibernate:
+      show_sql: true
+      format_sql: true
+      ddl-auto: update
+
+api:
+  jwt:
+    secret: SECRET
+    expiration: 60000000
+    issuer: Issuer

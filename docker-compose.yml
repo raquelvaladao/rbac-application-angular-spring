@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./rbac-frontend-angular
+      dockerfile: ./Dockerfile
+    ports:
+      - "4200:4200"
+    networks:
+      - frontend-backend-network
+    restart: on-failure
+  # backend:
+  #   container_name: backend
+  #   build:
+  #     context: ./rbac-backend-spring
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - frontend-backend-network
+  #     - backend-database-network
+  #   depends_on:
+  #     - postgres
+  #   restart: on-failure
+  postgres:
+    container_name: database
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data-v:/var/lib/postgresql/data                                     # "local" volume
+      - ./rbac-database-postgres/init.sql:/docker-entrypoint-initdb.d/init.sql     # init.sql with commands to populate db and create schemas
+      - ./rbac-database-postgres/csv/:/csv                                         # CSV folders mapped to container to be used by init.sql for population
+    networks:
+      - backend-database-network
+  pgadmin:
+    container_name: database_client
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "test@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "postgres"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
+    networks:
+      - backend-database-network
+
+volumes:
+  postgres-data-v:
+    external: false
+
+networks:
+  backend-database-network:
+  frontend-backend-network:
