@@ -1,56 +1,124 @@
-<div class="container d-flex justify-content-center mt-5 mb-5">
-    <div class="card mb-5">
-      <div class="card-header">Cadastrar usuário</div>
-  
-      <div class="card-body">
-        <form [formGroup]="form" (submit)="submit()">
-          <div>
+<div class="container mt-5 mb-5">
+  <form class="form-container" [formGroup]="form" (submit)="submit()">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Cadastrar piloto</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row d-flex">
+          <div class="col-md-6">
             <mat-form-field appearance="fill" class="full-width-field">
-              <mat-label>Login</mat-label>
+              <mat-label>Driverref</mat-label>
               <input
                 matInput
-                placeholder="login"
-                formControlName="login"
+                placeholder="driverRef"
+                formControlName="driverRef"
                 required
               />
-              <mat-error *ngIf="form.get('login')?.invalid">{{
-                errosInput("login")
+              <mat-error *ngIf="form.get('driverRef')?.invalid">{{
+                errosInput("driverRef")
               }}</mat-error>
             </mat-form-field>
           </div>
-  
-          <div>
+        </div>
+        <div class="row d-flex justify-content-center">
+          <div class="col-md-6">
             <mat-form-field appearance="fill" class="full-width-field">
-              <mat-label>Senha</mat-label>
+              <mat-label>Número</mat-label>
               <input
                 matInput
-                placeholder="Senha"
-                formControlName="password"
+                placeholder="Número"
+                formControlName="number"
+                required
+                type="number"
+              />
+              <mat-error *ngIf="form.get('number')?.invalid">{{
+                errosInput("number")
+              }}</mat-error>
+            </mat-form-field>  
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="full-width-field">
+              <mat-label>Código</mat-label>
+              <input
+                matInput
+                placeholder="Código"
+                formControlName="code"
                 required
               />
-              <mat-error *ngIf="form.get('password')?.invalid">{{
-                errosInput("password")
+              <mat-error *ngIf="form.get('code')?.invalid">{{
+                errosInput("code")
               }}</mat-error>
             </mat-form-field>
           </div>
-  
-          <div>
+        </div>
+        
+        <div class="row d-flex justify-content-center">
+          <div class="col-md-6">
             <mat-form-field appearance="fill" class="full-width-field">
-              <mat-label>Selecionar tipo</mat-label>
-              <mat-select formControlName="type" required>
-                <mat-option
-                  name="tipo"
-                  *ngFor="let tipo of tipos"
-                  [value]="tipo"
-                  >{{ tipo }}
-                </mat-option>
-              </mat-select>
+              <mat-label>Primeiro nome</mat-label>
+              <input
+                matInput
+                placeholder="Primeiro nome"
+                formControlName="forename"
+                required
+              />
+              <mat-error *ngIf="form.get('forename')?.invalid">{{
+                errosInput("forename")
+              }}</mat-error>
             </mat-form-field>
           </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="full-width-field">
+              <mat-label>Último nome</mat-label>
+              <input
+                matInput
+                placeholder="Último nome"
+                formControlName="surname"
+                required
+              />
+              <mat-error *ngIf="form.get('surname')?.invalid">{{
+                errosInput("surname")
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
 
-          <button type="submit" class="btn btn-primary mb-2">Enviar</button>
-        </form>
-      </div>
-    </div>
+        <div class="row d-flex justify-content-center">
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="full-width-field">
+              <mat-label>Data de nascimento</mat-label>
+              <input
+                matInput
+                placeholder="yyyy-MM-dd"
+                formControlName="birthDate"
+                required
+              />
+              <mat-error *ngIf="form.get('birthDate')?.invalid">{{
+                errosInput("birthDate")
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="full-width-field">
+              <mat-label>Nacionalidade</mat-label>
+              <input
+                matInput
+                placeholder="Nacionalidade"
+                formControlName="nationality"
+                required
+              />
+              <mat-error *ngIf="form.get('nationality')?.invalid">{{
+                errosInput("nationality")
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button type="submit" mat-raised-button="" color="primary">Enviar</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
   </div>
-  
+

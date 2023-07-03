@@ -39,6 +39,8 @@ import { MatTableModule } from '@angular/material/table';
 import { PositionComponent } from './admin/admin-reports/position/position.component';
 import { CitiesComponent } from './admin/admin-reports/cities/cities.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 registerLocaleData(localePt);
 @NgModule({
@@ -84,6 +86,8 @@ registerLocaleData(localePt);
     MatSnackBarModule,
     MatTableModule,
     MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     [RouterModule.forRoot(rootRouterConfig, { useHash: false })],
   ],
   providers: [

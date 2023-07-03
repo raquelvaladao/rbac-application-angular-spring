@@ -85,7 +85,7 @@ CREATE TABLE Circuits (
 
 DROP TABLE IF EXISTS Constructors CASCADE;
 CREATE TABLE Constructors  (
-    ConstructorId INTEGER PRIMARY KEY,
+    ConstructorId SERIAL PRIMARY KEY,
     ConstructorRef TEXT UNIQUE,
     Name TEXT UNIQUE,
     Nationality TEXT,
@@ -107,7 +107,7 @@ CREATE TABLE  DriverStandings(
 
 DROP TABLE IF EXISTS Driver CASCADE;
 CREATE TABLE Driver(
-    DriverId INTEGER PRIMARY KEY,
+    DriverId SERIAL PRIMARY KEY,
     DriverRef TEXT UNIQUE,
     Number INTEGER,
     Code TEXT,

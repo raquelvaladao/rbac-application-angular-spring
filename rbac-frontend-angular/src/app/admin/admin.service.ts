@@ -15,6 +15,7 @@ export class AdminService {
     ) { }
 
   ADMIN_URL = 'http://localhost:8080/admin'
+  NEW_PILOT_ENDPOINT = '/pilot'
   OVERVIEW_ENDPOINT = '/overview'
   REPORT_POSITION_ENDPOINT = '/report/position'
 
@@ -26,10 +27,10 @@ export class AdminService {
     return this.http.get<PositionReportTuple[]>(this.ADMIN_URL.concat(this.REPORT_POSITION_ENDPOINT));
   }
   
-  registerNewUser(request: any) {
-    this.http.post(this.ADMIN_URL, request).subscribe({
+  registerNewPilot(request: any) {
+    this.http.post(this.ADMIN_URL.concat(this.NEW_PILOT_ENDPOINT), request).subscribe({
       next: () => {
-        this.openSnackBar('Usuário criado com sucesso', 'green-snackbar');
+        this.openSnackBar('Piloto criado com sucesso', 'green-snackbar');
       },
       error: (error) => {
         if(error['status'] != '201'){

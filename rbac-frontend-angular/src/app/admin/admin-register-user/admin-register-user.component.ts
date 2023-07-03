@@ -12,7 +12,7 @@ import { AdminService } from '../admin.service';
 @Component({
   selector: 'app-admin-register-user',
   templateUrl: './admin-register-user.component.html',
-  styleUrls: ['./admin-register-user.css']
+  styleUrls: ['./admin-register-user.css'],
 })
 export class AdminRegisterUserComponent implements OnInit {
 
@@ -26,15 +26,16 @@ export class AdminRegisterUserComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.formBuilder.group(
       {
-        login: new FormControl("", [Validators.minLength(4)]),
-        password: new FormControl("", [
-          Validators.minLength(3),
+        driverRef: new FormControl("", [Validators.minLength(4)]),
+        number: new FormControl("", [
+          Validators.minLength(1),
           Validators.maxLength(50),
         ]),
-        type: new FormControl("", {
-          validators: [Validators.required],
-          updateOn: "blur",
-        }),
+        code: new FormControl(""),
+        forename: new FormControl(""),
+        surname: new FormControl(""),
+        birthDate: new FormControl("", [Validators.pattern(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/)]),
+        nationality: new FormControl("")
       },
       { validators: [Validators.required] }
     );
@@ -42,13 +43,16 @@ export class AdminRegisterUserComponent implements OnInit {
 
   submit() {
     if (this.form.valid) {
-      this.adminService.registerNewUser(this.form.getRawValue());
+      this.adminService.registerNewPilot(this.form.getRawValue());
     }
   }
 
   errosInput(propNome: string) {
     if (this.form.get(propNome)?.hasError("required")) {
       return "Preenchimento obrigatório";
+    }
+    if (this.form.get(propNome)?.hasError("pattern")) {
+      return "Data deve estar no formato yyyy-MM-dd";
     }
     if (this.form.get(propNome)?.hasError("minlength")) {
       let erros = this.form.controls[propNome].errors as ValidationErrors;
