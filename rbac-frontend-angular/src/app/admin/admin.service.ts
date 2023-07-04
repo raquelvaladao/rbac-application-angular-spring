@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { PositionReportTuple } from '../autenticacao/model/PositionReportTuple';
 import { AdminOverview } from '../autenticacao/model/AdminOverview';
+import { CityReport } from '../autenticacao/model/CityReport';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,8 @@ export class AdminService {
   NEW_PILOT_ENDPOINT = '/pilot'
   OVERVIEW_ENDPOINT = '/overview'
   REPORT_POSITION_ENDPOINT = '/report/position'
+  REPORT_CITIES_ENDPOINT = '/report/cities'
+  
 
   getOverview(): Observable<AdminOverview> {
     return this.http.get<AdminOverview>(this.ADMIN_URL.concat(this.OVERVIEW_ENDPOINT));
@@ -25,6 +28,10 @@ export class AdminService {
 
   getPositionReport(): Observable<PositionReportTuple[]> {
     return this.http.get<PositionReportTuple[]>(this.ADMIN_URL.concat(this.REPORT_POSITION_ENDPOINT));
+  }
+
+  getCitiesReport(searchTerm: string): Observable<CityReport[]> {
+    return this.http.get<CityReport[]>(this.ADMIN_URL.concat(this.REPORT_CITIES_ENDPOINT).concat('?cityName=').concat(searchTerm));
   }
   
   registerNewPilot(request: any) {

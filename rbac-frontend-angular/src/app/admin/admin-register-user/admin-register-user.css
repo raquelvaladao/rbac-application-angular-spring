@@ -1,5 +1,5 @@
 .full-width{
-    width: 100%;
+    width: 90%;
 }
 
 .top-padding{
@@ -21,4 +21,4 @@ div.card {
 
 mat-form-field {
     width: 100%;
-  }
+}

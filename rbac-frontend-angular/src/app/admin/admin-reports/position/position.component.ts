@@ -15,7 +15,7 @@ export class PositionComponent implements OnInit {
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   
-  displayedColumns: string[] = ['demo-name', 'demo-symbol'];
+  displayedColumns: string[] = ['name', 'symbol'];
   data: PositionReportTuple[] = [];
   
   src: MatTableDataSource<PositionReportTuple[]>;

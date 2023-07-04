@@ -12,6 +12,7 @@ import { TeamOverviewComponent } from "./team/team-overview/team-overview.compon
 import { AuthGuardGuard } from "./auth-guard.guard";
 import { ForbiddenComponent } from "./forbidden/forbidden.component";
 import { PositionComponent } from "./admin/admin-reports/position/position.component";
+import { CitiesComponent } from "./admin/admin-reports/cities/cities.component";
 
 export const rootRouterConfig: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -34,6 +35,10 @@ export const rootRouterConfig: Routes = [
           {
             path: "posicoes",
             component: PositionComponent,
+          },
+          {
+            path: "cidades",
+            component: CitiesComponent,
           },
         ]
       },
