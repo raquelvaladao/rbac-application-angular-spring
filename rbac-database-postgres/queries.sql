@@ -311,7 +311,7 @@
 --         FROM users
 --         WHERE login = v_driverref
 --     ) THEN
---         RAISE EXCEPTION 'Usuário já existe em Driver, pois foi achado em Users', NEW.driverref;
+--         RAISE EXCEPTION 'Usuário já existe em Driver, pois foi achado em Users';
 --     END IF;
     
 --     RETURN NEW;
@@ -336,7 +336,7 @@
 --         FROM users
 --         WHERE login = v_constructorref
 --     ) THEN
---         RAISE EXCEPTION 'Já existe o constructor na tabela Users %', NEW.constructorref;
+--         RAISE EXCEPTION 'Já existe o constructor na tabela Users';
 --     END IF;
     
 --     RETURN NEW;

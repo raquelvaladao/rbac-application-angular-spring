@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 @Slf4j
 @Api(tags = "Área de acesso para autenticação")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-15-228-86-83.sa-east-1.compute.amazonaws.com"})
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

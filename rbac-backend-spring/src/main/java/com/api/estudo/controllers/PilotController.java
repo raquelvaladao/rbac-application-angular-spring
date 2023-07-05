@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/pilot")
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-15-228-86-83.sa-east-1.compute.amazonaws.com"})
 @Api(tags = "Área de acesso de Pilotos")
 public class PilotController {
 
