@@ -14,6 +14,10 @@ export class TeamServiceService {
   OVERVIEW_YEAR_DATA_ENDPOINT = '/overview/years-data'
   OVERVIEW_PILOTS_ENDPOINT = '/overview/pilots'
   
+  REPORT_PILOTS_ENDPOINT = '/report/pilots'
+  REPORT_STATUS_ENDPOINT = '/report/status'
+  // OVERVIEW_PILOTS_ENDPOINT = '/overview/pilots'
+
   constructor(
     private http: HttpClient,
     private _snackBar: MatSnackBar,
@@ -29,6 +33,11 @@ export class TeamServiceService {
   getPilots() {
     return this.http.get<PilotFirstLastRace>(this.TEAM_URL.concat(this.OVERVIEW_PILOTS_ENDPOINT));
   }
+
+  getStatus() {
+    return this.http.get<PilotFirstLastRace>(this.TEAM_URL.concat(this.REPORT_STATUS_ENDPOINT));
+  }
+
 
   openSnackBar(message: string, color: string) {
     this._snackBar.open(message, 'Fechar', {

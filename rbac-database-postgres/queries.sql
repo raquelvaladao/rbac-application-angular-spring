@@ -168,7 +168,7 @@
 -- FROM Driver D
 -- LEFT JOIN Results R ON D.DriverId = R.DriverId
 -- WHERE R.ConstructorId = 1
--- GROUP BY D.DriverId, D.Forename, D.Surname
+-- GROUP BY D.DriverId, D.Forename, D.Surname;
 
 -- SELECT -- 
 -- 	S.Status as status, 

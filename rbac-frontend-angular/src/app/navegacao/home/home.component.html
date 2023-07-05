@@ -124,6 +124,26 @@
           </div>
         </div>
       </div>
+
+      <div *ngIf="this.roleStorage == 'escuderia'" class="col-md-5">
+        <div
+          (click)="navigateOnRole('relatorios/status')"
+          class="card mb-4 box-shadow shadow p-4 mb-3 rounded"
+        >
+          <img
+            src="assets/report.svg"
+            class="card-img-top"
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+            alt="Thumbnail [100%x225]"
+            style="height: 225px; width: 100%; display: block"
+            data-holder-rendered="true"
+          />
+          <div class="card-body">
+            <h4 class="card-title text-center">Relatório de status</h4>
+            <a class="stretched-link"></a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
