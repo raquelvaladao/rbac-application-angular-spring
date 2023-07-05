@@ -629,3 +629,7 @@ $$ LANGUAGE plpgsql;
 
 select atualizar_serial('driver_driverid_seq', 'driver', 'driverid');
 select atualizar_serial('constructors_constructorid_seq', 'constructors', 'constructorid');
+
+CREATE INDEX IF NOT EXISTS INDEX_GEOCITIES_BY_COORDINATES ON GEOCITIES15K(LAT, LONG);
+CREATE INDEX IF NOT EXISTS INDEX_PILOTS_FULL_NAME ON DRIVER(FORENAME, SURNAME);
+CREATE INDEX IF NOT EXISTS INDEX_RACE_YEAR ON RACES(YEAR, NAME);

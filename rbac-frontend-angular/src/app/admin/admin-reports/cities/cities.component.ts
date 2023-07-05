@@ -11,7 +11,7 @@ import { CityReport } from '../../../autenticacao/model/CityReport';
 
 })
 export class CitiesComponent implements OnInit {
-  pageSizeOptions = [5, 10, 25];
+  pageSizeOptions = [10, 25];
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   searchTerm = '';

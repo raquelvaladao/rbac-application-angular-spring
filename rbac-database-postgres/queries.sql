@@ -60,7 +60,6 @@
 -- SELECT InsertConstructorsAndDriversAsUsers();
 
 
-
 -- -- Trigger para a tabela Driver: assim que insere Driver, insere User
 -- CREATE TRIGGER InsertDriversTrigger
 -- AFTER INSERT ON Driver
@@ -92,72 +91,6 @@
 --   RETURN NEW;
 -- END;
 -- $$ LANGUAGE plpgsql;
-
--- -- Trigger e function para atualizar registros na tabela "users" quando um registro em "Driver" for modificado
--- CREATE OR REPLACE FUNCTION UpdateUsersOnDriverUpdate()
--- RETURNS TRIGGER AS $$
--- BEGIN
---   UPDATE users
---   SET login = NEW.driverref || '_d',
---       password = MD5(NEW.driverref)
---   WHERE IdOriginal = NEW.DriverId AND type = 'PILOTO';
-
---   RETURN NEW;
--- END;
--- $$ LANGUAGE plpgsql;
-
--- CREATE OR REPLACE TRIGGER UpdateUsersOnDriverUpdateTrigger
--- AFTER UPDATE ON Driver
--- FOR EACH ROW
--- EXECUTE FUNCTION UpdateUsersOnDriverUpdate();
-
--- -- Trigger para excluir registros da tabela "users" quando um registro em "Driver" for excluído
--- CREATE OR REPLACE FUNCTION DeleteUsersOnDriverDelete()
--- RETURNS TRIGGER AS $$
--- BEGIN
---   DELETE FROM users WHERE IdOriginal = OLD.DriverId  AND type = 'PILOTO';
-
---   RETURN OLD;
--- END;
--- $$ LANGUAGE plpgsql;
-
--- CREATE OR REPLACE TRIGGER DeleteUsersOnDriverDeleteTrigger
--- AFTER DELETE ON Driver
--- FOR EACH ROW
--- EXECUTE FUNCTION DeleteUsersOnDriverDelete();
-
--- -- Trigger para atualizar registros na tabela "users" quando um registro em "Constructors" for modificado
--- CREATE OR REPLACE FUNCTION UpdateUsersOnConstructorsUpdate()
--- RETURNS TRIGGER AS $$
--- BEGIN
---   UPDATE users
---   SET login = NEW.constructorref || '_c',
---       password = MD5(NEW.constructorref)
---   WHERE IdOriginal = NEW.ConstructorId AND type = 'ESCUDERIA';
-
---   RETURN NEW;
--- END;
--- $$ LANGUAGE plpgsql;
-
--- CREATE OR REPLACE TRIGGER UpdateUsersOnConstructorsUpdateTrigger
--- AFTER UPDATE ON Constructors
--- FOR EACH ROW
--- EXECUTE FUNCTION UpdateUsersOnConstructorsUpdate();
-
--- -- Trigger para excluir registros da tabela "users" quando um registro em "Constructors" for excluído
--- CREATE OR REPLACE FUNCTION DeleteUsersOnConstructorsDelete()
--- RETURNS TRIGGER AS $$
--- BEGIN
---   DELETE FROM users WHERE IdOriginal = OLD.ConstructorId AND type = 'ESCUDERIA';
-
---   RETURN OLD;
--- END;
--- $$ LANGUAGE plpgsql;
-
--- CREATE OR REPLACE TRIGGER DeleteUsersOnConstructorsDeleteTrigger
--- AFTER DELETE ON Constructors
--- FOR EACH ROW
--- EXECUTE FUNCTION DeleteUsersOnConstructorsDelete();
 
 -- INSERT INTO USERS (login, password, type, IdOriginal) VALUES ('admin', MD5('admin'), 'ADMINISTRADOR', null);
 
@@ -336,7 +269,7 @@
 -- -- ADMIN REPORTS
 -- SELECT S.Status as status, COUNT(*) AS quantity
 -- FROM Status S
--- LEFT JOIN Results R ON R.StatusId = S.StatusId	 --aparecer tbm os que não tem, com LEFT join
+-- JOIN Results R ON R.StatusId = S.StatusId
 -- GROUP BY S.Status
 -- ORDER BY quantity DESC;
 
@@ -355,3 +288,6 @@
 -- WHERE C.Name = :CITY_NAME AND
 --       A.Type IN ('medium_airport', 'large_airport') 
 -- ORDER BY distance_km_rounded;
+-- CREATE INDEX IF NOT EXISTS INDEX_GEOCITIES_BY_COORDINATES ON GEOCITIES15K(LAT, LONG);
+-- CREATE INDEX IF NOT EXISTS INDEX_PILOTS_FULL_NAME ON DRIVER(FORENAME, SURNAME);
+-- CREATE INDEX IF NOT EXISTS INDEX_RACE_YEAR ON RACES(YEAR, NAME);
