@@ -529,3 +529,7 @@ FOR EACH ROW
 EXECUTE FUNCTION DeleteUsersOnConstructorsDelete();
 
 INSERT INTO USERS (login, password, type, IdOriginal) VALUES ('admin', MD5('admin'), 'ADMINISTRADOR', null);
+
+
+CREATE EXTENSION IF NOT EXISTS Cube;
+CREATE EXTENSION IF NOT EXISTS EarthDistance;

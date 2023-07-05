@@ -1,16 +1,16 @@
 version: '3'
 
 services:
-  frontend:
-    container_name: frontend
-    build:
-      context: ./rbac-frontend-angular
-      dockerfile: ./Dockerfile
-    ports:
-      - "4200:80"
-    networks:
-      - frontend-backend-network
-    restart: on-failure
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./rbac-frontend-angular
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - "4200:80"
+  #   networks:
+  #     - frontend-backend-network
+  #   restart: on-failure
   # backend:
   #   container_name: backend
   #   build:
@@ -56,4 +56,4 @@ volumes:
 
 networks:
   backend-database-network:
-  frontend-backend-network:
+  # frontend-backend-network:
