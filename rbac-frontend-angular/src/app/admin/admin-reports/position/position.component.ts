@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from '../../admin.service';
-import { PositionReportTuple } from 'src/app/autenticacao/model/PositionReportTuple';
+import { StatusReportTuple } from 'src/app/autenticacao/model/PositionReportTuple';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 
@@ -16,9 +16,9 @@ export class PositionComponent implements OnInit {
   showFirstLastButtons = true;
   
   displayedColumns: string[] = ['name', 'symbol'];
-  data: PositionReportTuple[] = [];
+  data: StatusReportTuple[] = [];
   
-  src: MatTableDataSource<PositionReportTuple[]>;
+  src: MatTableDataSource<StatusReportTuple[]>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 

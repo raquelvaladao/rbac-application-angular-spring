@@ -3,7 +3,6 @@ import { LoginComponent } from "./autenticacao/login/login.component";
 import { LogoutComponent } from "./autenticacao/logout/logout.component";
 import { RegistrarComponent } from "./autenticacao/registrar/registrar.component";
 import { HomeComponent } from "./navegacao/home/home.component";
-import { PilotReportsComponent } from "./pilot/pilot-reports/pilot-reports.component";
 import { PilotOverviewComponent } from "./pilot/pilot-overview/pilot-overview.component";
 import { AdminOverviewComponent } from "./admin/admin-overview/admin-overview.component";
 import { AdminRegisterUserComponent } from "./admin/admin-register-user/admin-register-user.component";
@@ -13,6 +12,8 @@ import { AuthGuardGuard } from "./auth-guard.guard";
 import { ForbiddenComponent } from "./forbidden/forbidden.component";
 import { PositionComponent } from "./admin/admin-reports/position/position.component";
 import { CitiesComponent } from "./admin/admin-reports/cities/cities.component";
+import { VictoriesComponent } from "./pilot/pilot-reports/victories/victories.component";
+import { FirstLastRaceComponent } from "./pilot/pilot-reports/first-last-race/first-last-race.component";
 
 export const rootRouterConfig: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -33,7 +34,7 @@ export const rootRouterConfig: Routes = [
         path: "relatorios",
         children: [
           {
-            path: "posicoes",
+            path: "status",
             component: PositionComponent,
           },
           {
@@ -58,7 +59,16 @@ export const rootRouterConfig: Routes = [
     children: [
       {
         path: "relatorios",
-        component: PilotReportsComponent,
+        children: [
+          {
+            path: "vitorias",
+            component: VictoriesComponent,
+          },
+          {
+            path: "anos-corrida",
+            component: FirstLastRaceComponent,
+          },
+        ]
       },
       {
         path: "overview",

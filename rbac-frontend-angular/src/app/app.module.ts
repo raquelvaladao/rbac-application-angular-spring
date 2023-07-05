@@ -23,7 +23,6 @@ import { MenuComponent } from "./navegacao/menu/menu.component";
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
-import { PilotReportsComponent } from './pilot/pilot-reports/pilot-reports.component';
 import { PilotOverviewComponent } from './pilot/pilot-overview/pilot-overview.component';
 import { AdminOverviewComponent } from './admin/admin-overview/admin-overview.component';
 import { TeamOverviewComponent } from './team/team-overview/team-overview.component';
@@ -41,6 +40,8 @@ import { CitiesComponent } from './admin/admin-reports/cities/cities.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import { VictoriesComponent } from './pilot/pilot-reports/victories/victories.component';
+import { FirstLastRaceComponent } from './pilot/pilot-reports/first-last-race/first-last-race.component';
 
 registerLocaleData(localePt);
 @NgModule({
@@ -59,14 +60,16 @@ registerLocaleData(localePt);
     AdminRegisterUserComponent,
     PositionComponent,
 
-    PilotReportsComponent,
     PilotOverviewComponent,
-    
+    VictoriesComponent,
+    FirstLastRaceComponent,
+
     TeamOverviewComponent,
     TeamReportsComponent,
     ForbiddenComponent,
     PositionComponent,
     CitiesComponent,
+    
   ],
   imports: [
     BrowserModule,

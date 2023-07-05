@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { PositionReportTuple } from '../autenticacao/model/PositionReportTuple';
+import { StatusReportTuple } from '../autenticacao/model/PositionReportTuple';
 import { AdminOverview } from '../autenticacao/model/AdminOverview';
 import { CityReport } from '../autenticacao/model/CityReport';
 
@@ -26,8 +26,8 @@ export class AdminService {
     return this.http.get<AdminOverview>(this.ADMIN_URL.concat(this.OVERVIEW_ENDPOINT));
   }
 
-  getPositionReport(): Observable<PositionReportTuple[]> {
-    return this.http.get<PositionReportTuple[]>(this.ADMIN_URL.concat(this.REPORT_POSITION_ENDPOINT));
+  getPositionReport(): Observable<StatusReportTuple[]> {
+    return this.http.get<StatusReportTuple[]>(this.ADMIN_URL.concat(this.REPORT_POSITION_ENDPOINT));
   }
 
   getCitiesReport(searchTerm: string): Observable<CityReport[]> {

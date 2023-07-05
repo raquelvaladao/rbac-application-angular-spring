@@ -200,15 +200,6 @@
 -- ORDER BY R.Year ASC;
 
 
--- -- ADMIN STATUS REPORT
--- SELECT 
--- 	S.Status as status, 
--- 	COUNT(*) AS quantity
--- FROM Results R
--- JOIN Status S ON R.StatusId = S.StatusId	
--- WHERE R.DriverId = :DRIVER_ID
--- GROUP BY S.Status
--- ORDER BY quantity DESC;
 
 -- -- ADMIN OPERATIONS - INSERT NEW USER
 -- INSERT INTO USERS (login, password, type, idOriginal) VALUES (:login, MD5(:password), :type, null);
@@ -236,18 +227,18 @@
 -- GROUP BY S.Status
 -- ORDER BY quantity DESC;
 
--- CREATE EXTENSION IF NOT EXISTS Cube;
--- CREATE EXTENSION IF NOT EXISTS EarthDistance;
 -- SELECT C.Name AS city_name,
 --        A.IATACode AS iata_code,
 --        A.Name AS airport_name,
 --        A.Type AS airport_type,
 --        ROUND( 
--- 		   CAST((earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) / 100) as numeric), 2
+-- 		   CAST((earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) / 1000) as numeric), 2
 -- 	   ) AS distance_km_rounded
 -- FROM Airports A
 -- JOIN GeoCities15K C ON A.City = C.Name
--- WHERE C.Name = 'Rio de Janeiro' AND
+-- WHERE C.Name = 'São Paulo' AND
 --       A.Type IN ('medium_airport', 'large_airport') AND
---       earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) <= 100000
+--       ROUND( 
+-- 		   CAST((earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) / 1000) as numeric), 2
+-- 	   ) <= 100
 -- ORDER BY distance_km_rounded;

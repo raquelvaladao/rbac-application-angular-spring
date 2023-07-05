@@ -1,5 +1,9 @@
 .demo-table {
-  width: 80%;
+  width: 40%;
+}
+
+.demo-table-2 {
+  width: 10%;
 }
 
 .mat-column-demo-name {

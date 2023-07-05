@@ -1,4 +1,4 @@
-export interface PositionReportTuple {
-    position: string;
+export interface StatusReportTuple {
+    status: string;
     quantity: number;
 }
