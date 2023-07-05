@@ -1,11 +1,7 @@
 package com.api.estudo.services;
 
-import com.api.estudo.dto.AdminPositionQuantityReport;
-import com.api.estudo.dto.AdminReport;
-import com.api.estudo.dto.ApiResponse;
-import com.api.estudo.dto.NewUserRequest;
+import com.api.estudo.dto.*;
 import com.api.estudo.database.repositories.UserRepository;
-import com.api.estudo.enums.UserType;
 import com.api.estudo.exceptions.InvalidInputException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -13,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,23 +25,46 @@ public class AdminService {
         this.userRepository = userRepository;
     }
 
-    public ResponseEntity<Object> createUserWithTypeRequest(NewUserRequest newUserRequest) {
-        if(!UserType.isValid(newUserRequest.getType()))
-            throw new InvalidInputException("Tipo do usuário não aceito");
+    public ResponseEntity<Object> createNewPilot(NewPilotRequest newPilotRequest) {
+        if(Strings.isBlank(newPilotRequest.getDriverRef()))
+            throw new InvalidInputException("Driverref do usuário obrigatória");
 
-        if(Strings.isBlank(newUserRequest.getLogin()) || Strings.isBlank(newUserRequest.getPassword()))
-            throw new InvalidInputException("Login e senha do usuário obrigatórias");
+        Date sqlDate = formatBirthDate(newPilotRequest);
 
-        userRepository.insertUser(newUserRequest.getLogin(), newUserRequest.getPassword(), newUserRequest.getType());
-
-        log.info("[ AdminService ] - Created new user.");
-
+        userRepository.insertPilot(
+                newPilotRequest.getDriverRef(),
+                newPilotRequest.getNumber(),
+                newPilotRequest.getCode(),
+                newPilotRequest.getForename(),
+                newPilotRequest.getSurname(),
+                sqlDate,
+                newPilotRequest.getNationality()
+        );
+        log.info("[ AdminService ] - Created new pilot.");
         ApiResponse response = ApiResponse
                 .builder()
                 .code("SUCESSO")
-                .message(newUserRequest.getLogin() + " criado!")
+                .message(newPilotRequest.getForename() + " criado!")
                 .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
+    public ResponseEntity<Object> createNewTeam(NewTeamRequest newTeamRequest) {
+        if(Strings.isBlank(newTeamRequest.getConstructorRef()) || Strings.isBlank(newTeamRequest.getName()))
+            throw new InvalidInputException("ConstructorRef do usuário obrigatória");
+
+        userRepository.createNewTeam(
+                newTeamRequest.getConstructorRef(),
+                newTeamRequest.getName(),
+                newTeamRequest.getNationality(),
+                newTeamRequest.getUrl()
+        );
+        log.info("[ AdminService ] - Created new team.");
+        ApiResponse response = ApiResponse
+                .builder()
+                .code("SUCESSO")
+                .message(newTeamRequest.getName() + " criado!")
+                .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -71,7 +93,7 @@ public class AdminService {
         positionQuantity.forEach(tuple -> {
             list.add(
                     AdminPositionQuantityReport.builder()
-                            .position(tuple[0] == null ? "null" : tuple[0].toString())
+                            .status(tuple[0] == null ? "-" : tuple[0].toString())
                             .quantity(tuple[1] == null ? -1 : Integer.parseInt(tuple[1].toString()))
                             .build()
             );
@@ -80,4 +102,32 @@ public class AdminService {
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
+    public ResponseEntity<Object> getCityAirportReport(String cityName) {
+        List<AdminCityReport> list = new ArrayList<>();
+        List<Object[]> airports = userRepository.reportAirports(cityName);
+
+        airports.forEach(tuple -> {
+            list.add(
+                    AdminCityReport.builder()
+                            .cityName(tuple[0] == null ? "-" : tuple[0].toString())
+                            .iataCode(tuple[1] == null ? "-" : tuple[1].toString())
+                            .airportName(tuple[2] == null ? "-" : tuple[2].toString())
+                            .airportType(tuple[3] == null ? "-" : tuple[3].toString())
+                            .distanceRounded(tuple[4] == null ? "0" : tuple[4].toString())
+                            .build()
+            );
+        });
+        log.info("[ AdminService ] - Generating admin city report");
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
+
+    private Date formatBirthDate(NewPilotRequest newPilotRequest)  {
+        try {
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date date = formatter.parse(newPilotRequest.getBirthDate());
+            return new Date(date.getTime());
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

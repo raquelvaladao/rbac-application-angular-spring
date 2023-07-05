@@ -1,7 +1,8 @@
 package com.api.estudo.controllers;
 
 
-import com.api.estudo.dto.NewUserRequest;
+import com.api.estudo.dto.NewPilotRequest;
+import com.api.estudo.dto.NewTeamRequest;
 import com.api.estudo.services.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,15 +24,16 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping
-    public ResponseEntity<Object> hello(){
-        return ResponseEntity.ok("Hello Admin!");
+    @PostMapping("/pilot")
+    @ApiOperation(nickname = "Criar piloto", value = "Criar Piloto", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> createPilot(@RequestBody NewPilotRequest newPilotRequest) {
+        return adminService.createNewPilot(newPilotRequest);
     }
 
-    @PostMapping
-    @ApiOperation(nickname = "Criar usuário", value = "Criar Piloto ou Escuderia", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> createUser(@RequestBody NewUserRequest userWithTypeRequest) {
-        return adminService.createUserWithTypeRequest(userWithTypeRequest);
+    @PostMapping("/team")
+    @ApiOperation(nickname = "Criar escuderia", value = "Criar escuderia", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> createTeam(@RequestBody NewTeamRequest newTeamRequest) {
+        return adminService.createNewTeam(newTeamRequest);
     }
 
     @GetMapping("/overview")
@@ -46,10 +48,9 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getPositionReport());
     }
 
-    //TODO
-    @GetMapping("/report/test")
-    @ApiOperation(value = "Relatório")
-    public ResponseEntity<Object> report(){
-        return ResponseEntity.ok("Hello Admin! REPORT");
+    @GetMapping("/report/cities")
+    @ApiOperation(value = "Relatório de aeroportos próximos a uma cidade num raio de 100km")
+    public ResponseEntity<Object> reportCity(@RequestParam("cityName") String cityName){
+        return ResponseEntity.ok(adminService.getCityAirportReport(cityName));
     }
 }

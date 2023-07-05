@@ -6,11 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminPositionQuantityReport {
-    private String status;
-    private Integer quantity;
+public class VictoriesRollup {
+        private String total;
+        private List<VictoriesYear> summary;
+        private List<VictoriesYearRace> allVictories;
 }

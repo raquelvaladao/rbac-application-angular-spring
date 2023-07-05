@@ -4,10 +4,12 @@ import com.api.estudo.dto.ApiResponse;
 import com.api.estudo.exceptions.EntityNotFoundException;
 import com.api.estudo.exceptions.ForbiddenException;
 import com.api.estudo.exceptions.InvalidInputException;
+import org.postgresql.util.PSQLException;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -81,6 +83,27 @@ public class ValidationHandlerController extends ResponseEntityExceptionHandler 
                 .message(message)
                 .build();
         return new ResponseEntity<>(errorMessage, HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(PSQLException.class)
+    public ResponseEntity<Object> handlePSQLException(PSQLException e) {
+        String message = NestedExceptionUtils.getMostSpecificCause(e).getMessage();
+
+        ApiResponse errorMessage = ApiResponse.builder()
+                .code("OPERACAO_FALHOU")
+                .message(message)
+                .build();
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(JpaSystemException.class)
+    public ResponseEntity<Object> handleJpaSystemException(JpaSystemException e) {
+        String message = NestedExceptionUtils.getMostSpecificCause(e).getMessage();
+
+        ApiResponse errorMessage = ApiResponse.builder()
+                .code("OPERACAO_FALHOU")
+                .message(message)
+                .build();
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     private String getConstraint(String message) {

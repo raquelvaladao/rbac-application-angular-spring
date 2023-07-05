@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminPositionQuantityReport {
+public class Status {
+
     private String status;
     private Integer quantity;
 }

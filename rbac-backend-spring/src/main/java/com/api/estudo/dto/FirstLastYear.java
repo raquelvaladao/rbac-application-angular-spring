@@ -1,16 +1,16 @@
 package com.api.estudo.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminPositionQuantityReport {
-    private String status;
-    private Integer quantity;
+public class FirstLastYear {
+
+    private String firstYear;
+    private String lastYear;
 }

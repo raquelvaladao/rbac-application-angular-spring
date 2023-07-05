@@ -7,10 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminPositionQuantityReport {
-    private String status;
-    private Integer quantity;
+@Builder
+public class PilotSearch {
+
+    private String name;
+    private String birth;
+    private String nationality;
 }

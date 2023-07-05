@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminPositionQuantityReport {
-    private String status;
-    private Integer quantity;
+public class VictoriesYearRace {
+
+    private String year;
+    private String race;
+    private String quantity;
 }
