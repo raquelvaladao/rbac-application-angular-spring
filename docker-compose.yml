@@ -1,29 +1,29 @@
 version: '3'
 
 services:
-  # frontend:
-  #   container_name: frontend
-  #   build:
-  #     context: ./rbac-frontend-angular
-  #     dockerfile: ./Dockerfile
-  #   ports:
-  #     - "4200:80"
-  #   networks:
-  #     - frontend-backend-network
-  #   restart: on-failure
-  # backend:
-  #   container_name: backend
-  #   build:
-  #     context: ./rbac-backend-spring
-  #     dockerfile: ./Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - frontend-backend-network
-  #     - backend-database-network
-  #   depends_on:
-  #     - postgres
-  #   restart: on-failure
+  frontend:
+    container_name: frontend
+    build:
+      context: ./rbac-frontend-angular
+      dockerfile: ./Dockerfile
+    ports:
+      - "4200:80"
+    networks:
+      - frontend-backend-network
+    restart: on-failure
+  backend:
+    container_name: backend
+    build:
+      context: ./rbac-backend-spring
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - frontend-backend-network
+      - backend-database-network
+    depends_on:
+      - postgres
+    restart: on-failure
   postgres:
     container_name: database
     image: postgres
@@ -32,7 +32,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - volume-new:/var/lib/postgresql/data                                     # "local" volume
+      - db-volume-postgres:/var/lib/postgresql/data                                     # "local" volume
       - ./rbac-database-postgres/init.sql:/docker-entrypoint-initdb.d/init.sql     # init.sql with commands to populate db and create schemas
       - ./rbac-database-postgres/csv/:/csv                                         # CSV folders mapped to container to be used by init.sql for population
     networks:
@@ -51,9 +51,9 @@ services:
       - backend-database-network
 
 volumes:
-  volume-new:
+  db-volume-postgres:
     external: false
 
 networks:
   backend-database-network:
-  # frontend-backend-network:
+  frontend-backend-network:
