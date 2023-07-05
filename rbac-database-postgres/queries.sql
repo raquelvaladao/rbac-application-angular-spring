@@ -1,349 +1,349 @@
-DROP TABLE IF EXISTS USER_TYPE CASCADE;
-CREATE TABLE USER_TYPE(
-    userType CHAR(13),
-    PRIMARY KEY (userType)
-);
+-- DROP TABLE IF EXISTS USER_TYPE CASCADE;
+-- CREATE TABLE USER_TYPE(
+--     userType CHAR(13),
+--     PRIMARY KEY (userType)
+-- );
 
-DROP TABLE IF EXISTS USERS CASCADE;
-CREATE TABLE USERS(
-    userId SERIAL PRIMARY KEY,
-    login TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
-    type CHAR(13) NOT NULL,
-    idOriginal INTEGER
-);
-ALTER TABLE USERS ADD CONSTRAINT fk_user_type FOREIGN KEY (type) REFERENCES USER_TYPE(userType);
+-- DROP TABLE IF EXISTS USERS CASCADE;
+-- CREATE TABLE USERS(
+--     userId SERIAL PRIMARY KEY,
+--     login TEXT NOT NULL UNIQUE,
+--     password TEXT NOT NULL,
+--     type CHAR(13) NOT NULL,
+--     idOriginal INTEGER
+-- );
+-- ALTER TABLE USERS ADD CONSTRAINT fk_user_type FOREIGN KEY (type) REFERENCES USER_TYPE(userType);
 
-INSERT INTO USER_TYPE (userType)
-VALUES ('ADMINISTRADOR');
-INSERT INTO USER_TYPE (userType)
-VALUES ('PILOTO');
-INSERT INTO USER_TYPE (userType)
-VALUES ('ESCUDERIA');
+-- INSERT INTO USER_TYPE (userType)
+-- VALUES ('ADMINISTRADOR');
+-- INSERT INTO USER_TYPE (userType)
+-- VALUES ('PILOTO');
+-- INSERT INTO USER_TYPE (userType)
+-- VALUES ('ESCUDERIA');
 
-DROP TABLE IF EXISTS LOG_TABLE CASCADE;
-CREATE TABLE Log_Table (
-  id SERIAL PRIMARY KEY,
-  userid INTEGER,
-  datetime TIMESTAMP
-);
+-- DROP TABLE IF EXISTS LOG_TABLE CASCADE;
+-- CREATE TABLE Log_Table (
+--   id SERIAL PRIMARY KEY,
+--   userid INTEGER,
+--   datetime TIMESTAMP
+-- );
 
-DROP TABLE IF EXISTS LOG_TABLE CASCADE;
-CREATE TABLE LOG_TABLE (
-  id SERIAL PRIMARY KEY,
-  userid INTEGER,
-  datetime TIMESTAMP
-);
+-- DROP TABLE IF EXISTS LOG_TABLE CASCADE;
+-- CREATE TABLE LOG_TABLE (
+--   id SERIAL PRIMARY KEY,
+--   userid INTEGER,
+--   datetime TIMESTAMP
+-- );
 
-ALTER TABLE LOG_TABLE ADD CONSTRAINT fk_user_id FOREIGN KEY (userid) REFERENCES USERS(userid);
+-- ALTER TABLE LOG_TABLE ADD CONSTRAINT fk_user_id FOREIGN KEY (userid) REFERENCES USERS(userid);
 
-CREATE OR REPLACE FUNCTION InsertConstructorsAndDriversAsUsers()
-RETURNS VOID AS $$
-DECLARE
-  constructor_row Constructors%ROWTYPE;
-  driver_row Driver%ROWTYPE;
-BEGIN
-  -- Inserir registros da tabela Constructors
-  FOR constructor_row IN SELECT * FROM Constructors LOOP
-    INSERT INTO users (login, password, type, IdOriginal)
-    VALUES (constructor_row.constructorref || '_c', MD5(constructor_row.constructorref), 'ESCUDERIA', constructor_row.ConstructorId);
-  END LOOP;
+-- CREATE OR REPLACE FUNCTION InsertConstructorsAndDriversAsUsers()
+-- RETURNS VOID AS $$
+-- DECLARE
+--   constructor_row Constructors%ROWTYPE;
+--   driver_row Driver%ROWTYPE;
+-- BEGIN
+--   -- Inserir registros da tabela Constructors
+--   FOR constructor_row IN SELECT * FROM Constructors LOOP
+--     INSERT INTO users (login, password, type, IdOriginal)
+--     VALUES (constructor_row.constructorref || '_c', MD5(constructor_row.constructorref), 'ESCUDERIA', constructor_row.ConstructorId);
+--   END LOOP;
 
-  -- Inserir registros da tabela Driver
-  FOR driver_row IN SELECT * FROM Driver LOOP
-    INSERT INTO users (login, password, type, IdOriginal)
-    VALUES (driver_row.driverref || '_d', MD5(driver_row.driverref), 'PILOTO', driver_row.DriverId);
-  END LOOP;
-END;
-$$ LANGUAGE plpgsql;
+--   -- Inserir registros da tabela Driver
+--   FOR driver_row IN SELECT * FROM Driver LOOP
+--     INSERT INTO users (login, password, type, IdOriginal)
+--     VALUES (driver_row.driverref || '_d', MD5(driver_row.driverref), 'PILOTO', driver_row.DriverId);
+--   END LOOP;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
-SELECT InsertConstructorsAndDriversAsUsers();
-
-
--- Trigger para a tabela Driver: assim que insere Driver, insere User
-CREATE TRIGGER InsertDriversTrigger
-AFTER INSERT ON Driver
-FOR EACH ROW
-EXECUTE FUNCTION InsertDriversAsUsers();
-
--- Função para inserir registros da tabela Driver na tabela users (pelo trigger)
-CREATE OR REPLACE FUNCTION InsertDriversAsUsers()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO users (login, password, type, IdOriginal)
-  VALUES (NEW.driverref || '_d', MD5(NEW.driverref), 'PILOTO', NEW.DriverId);
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger de insert para a tabela Constructors para inserir em Users
-CREATE TRIGGER InsertConstructorsTrigger
-AFTER INSERT ON Constructors
-FOR EACH ROW
-EXECUTE FUNCTION InsertConstructorsAsUsers();
-
--- Função para inserir registros da tabela Constructors na tabela users
-CREATE OR REPLACE FUNCTION InsertConstructorsAsUsers()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO users (login, password, type, IdOriginal)
-  VALUES (NEW.constructorref || '_c', MD5(NEW.constructorref), 'ESCUDERIA', NEW.ConstructorId);
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-INSERT INTO USERS (login, password, type, IdOriginal) VALUES ('admin', MD5('admin'), 'ADMINISTRADOR', null);
-
-CREATE OR REPLACE FUNCTION atualizar_serial(seq regclass, nome_tabela regclass, nome_coluna_id text)
-RETURNS VOID AS $$
-DECLARE
-    id_maximo INTEGER;
-BEGIN
-    EXECUTE format('SELECT MAX(%I) FROM %I', nome_coluna_id, nome_tabela) INTO id_maximo;
-    EXECUTE format('SELECT setval(%L, %s)', seq, id_maximo + 1);
-END;
-$$ LANGUAGE plpgsql;
+-- SELECT InsertConstructorsAndDriversAsUsers();
 
 
-select atualizar_serial('driver_driverid_seq', 'driver', 'driverid');
-select atualizar_serial('constructors_constructorid_seq', 'constructors', 'constructorid');
+-- -- Trigger para a tabela Driver: assim que insere Driver, insere User
+-- CREATE TRIGGER InsertDriversTrigger
+-- AFTER INSERT ON Driver
+-- FOR EACH ROW
+-- EXECUTE FUNCTION InsertDriversAsUsers();
 
--- TEAM SEARCH
-SELECT CONCAT(D.Forename, ' ', D.Surname) AS full_name, D.DOB AS date_of_birth, D.Nationality
-FROM Driver D
-JOIN Results R ON D.DriverId = R.DriverId
-JOIN Constructors C ON R.ConstructorId = C.ConstructorId
-WHERE D.Forename = :FORENAME
-  AND C.ConstructorId = :TEAM;
+-- -- Função para inserir registros da tabela Driver na tabela users (pelo trigger)
+-- CREATE OR REPLACE FUNCTION InsertDriversAsUsers()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--   INSERT INTO users (login, password, type, IdOriginal)
+--   VALUES (NEW.driverref || '_d', MD5(NEW.driverref), 'PILOTO', NEW.DriverId);
+--   RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
--- TEAM REPORTS  -- escuderia com contagem 0
-SELECT
-CONCAT(D.Forename, ' ', D.Surname) AS pilot_name,
-COUNT(CASE WHEN R.Position = 1 THEN 1 ELSE NULL END) AS victories
-FROM Driver D
-JOIN Results R ON D.DriverId = R.DriverId
-WHERE R.ConstructorId = :TEAM_ID
-GROUP BY D.DriverId, D.Forename, D.Surname
-ORDER BY victories DESC;
+-- -- Trigger de insert para a tabela Constructors para inserir em Users
+-- CREATE TRIGGER InsertConstructorsTrigger
+-- AFTER INSERT ON Constructors
+-- FOR EACH ROW
+-- EXECUTE FUNCTION InsertConstructorsAsUsers();
 
-SELECT
-	S.Status as status, 
-	COUNT(*) AS quantity
-FROM Results R
-JOIN Status S ON R.StatusId = S.StatusId	
-WHERE R.ConstructorId = :TEAM_ID
-GROUP BY S.Status
-ORDER BY quantity DESC;
+-- -- Função para inserir registros da tabela Constructors na tabela users
+-- CREATE OR REPLACE FUNCTION InsertConstructorsAsUsers()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--   INSERT INTO users (login, password, type, IdOriginal)
+--   VALUES (NEW.constructorref || '_c', MD5(NEW.constructorref), 'ESCUDERIA', NEW.ConstructorId);
+--   RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
--- team overview
-CREATE OR REPLACE FUNCTION team_victories_quantity(id_escuderia INT)
-  RETURNS INT AS
-$$
-DECLARE
-  victories INT;
-BEGIN
-  SELECT COUNT(*) INTO victories
-  FROM Results
-  WHERE ConstructorId = id_escuderia AND Position = 1;
+-- INSERT INTO USERS (login, password, type, IdOriginal) VALUES ('admin', MD5('admin'), 'ADMINISTRADOR', null);
 
-  RETURN victories;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION disctinct_pilots_quantity(id_escuderia INT)
-  RETURNS INT AS
-$$
-DECLARE
-  quantity INT;
-BEGIN
-  SELECT COUNT(DISTINCT DriverId) INTO quantity
-  FROM Results
-  WHERE ConstructorId = id_escuderia;
-
-  RETURN quantity;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION team_first_last_year_data(id_escuderia INT)
-  RETURNS TEXT AS
-$$
-DECLARE
-  first_year INT;
-  last_year INT;
-BEGIN
-  SELECT MIN(Races.Year), MAX(Races.Year) 
-  INTO first_year, last_year
-  FROM Races
-  JOIN Results ON Races.RaceId = Results.RaceId
-  WHERE Results.ConstructorId = id_escuderia;
-
-  RETURN CONCAT(first_year, ',', last_year);
-END;
-$$
-LANGUAGE plpgsql;
+-- CREATE OR REPLACE FUNCTION atualizar_serial(seq regclass, nome_tabela regclass, nome_coluna_id text)
+-- RETURNS VOID AS $$
+-- DECLARE
+--     id_maximo INTEGER;
+-- BEGIN
+--     EXECUTE format('SELECT MAX(%I) FROM %I', nome_coluna_id, nome_tabela) INTO id_maximo;
+--     EXECUTE format('SELECT setval(%L, %s)', seq, id_maximo + 1);
+-- END;
+-- $$ LANGUAGE plpgsql;
 
 
--- PILOT REPORTS
+-- select atualizar_serial('driver_driverid_seq', 'driver', 'driverid');
+-- select atualizar_serial('constructors_constructorid_seq', 'constructors', 'constructorid');
 
--- o rollup usa o nome da corrida ao invés de id pois corridas sem nome não interessam pro nosso sistema
---pusemos YEAR como primeiro parâmetro do rollup, assim conseguimos todas as vitórias por ano (ano fixado), o número total e o número daquele ano e corrida (que é sempre 1)
-SELECT
-	COUNT(*) AS quantidade,
-	YEAR as ano,
-	R.Name as corrida,
-FROM Results RS
-JOIN Races R ON RS.RaceId = R.RaceId
-JOIN driver d ON RS.driverid = D.driverid
-WHERE
-    RS.DriverId = :DRIVER_ID
-    AND RS.PositionText = '1'
-GROUP BY ROLLUP (R.Year, R.Name) 
-ORDER BY R.Year ASC;
+-- -- TEAM SEARCH
+-- SELECT CONCAT(D.Forename, ' ', D.Surname) AS full_name, D.DOB AS date_of_birth, D.Nationality
+-- FROM Driver D
+-- JOIN Results R ON D.DriverId = R.DriverId
+-- JOIN Constructors C ON R.ConstructorId = C.ConstructorId
+-- WHERE D.Forename = :FORENAME
+--   AND C.ConstructorId = :TEAM;
 
-SELECT S.status, COUNT(*) AS quantidade_resultados
-FROM RESULTS
-JOIN STATUS S ON S.STATUSID = RESULTS.STATUSID
-WHERE driverId = :DRIVER_ID
-GROUP BY S.statusId
-ORDER BY quantidade_resultados DESC;
+-- -- TEAM REPORTS  -- escuderia com contagem 0
+-- SELECT
+-- CONCAT(D.Forename, ' ', D.Surname) AS pilot_name,
+-- COUNT(CASE WHEN R.Position = 1 THEN 1 ELSE NULL END) AS victories
+-- FROM Driver D
+-- JOIN Results R ON D.DriverId = R.DriverId
+-- WHERE R.ConstructorId = :TEAM_ID
+-- GROUP BY D.DriverId, D.Forename, D.Surname
+-- ORDER BY victories DESC;
 
--- overview pilot
+-- SELECT
+-- 	S.Status as status, 
+-- 	COUNT(*) AS quantity
+-- FROM Results R
+-- JOIN Status S ON R.StatusId = S.StatusId	
+-- WHERE R.ConstructorId = :TEAM_ID
+-- GROUP BY S.Status
+-- ORDER BY quantity DESC;
 
-CREATE OR REPLACE FUNCTION get_first_and_last_race_years_from_pilot(idParam INTEGER)
-RETURNS TEXT AS $$
-DECLARE
-  firstYear INTEGER;
-  lastYear INTEGER;
-BEGIN
-  SELECT MIN(year), MAX(year)
-  INTO firstYear, lastYear
-  FROM results
-	JOIN races ON results.raceid = races.raceid
-	WHERE results.driverid = idParam;
+-- -- team overview
+-- CREATE OR REPLACE FUNCTION team_victories_quantity(id_escuderia INT)
+--   RETURNS INT AS
+-- $$
+-- DECLARE
+--   victories INT;
+-- BEGIN
+--   SELECT COUNT(*) INTO victories
+--   FROM Results
+--   WHERE ConstructorId = id_escuderia AND Position = 1;
 
-  RETURN CONCAT(firstYear, ',', lastYear);
-END;
-$$ LANGUAGE plpgsql;
+--   RETURN victories;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION get_pilot_victories(idParam INTEGER)
-RETURNS INTEGER AS $$
-DECLARE
-  quantity INTEGER;
-BEGIN
-  SELECT COUNT(*)
-  INTO quantity
-  FROM RESULTS
-  WHERE driverId = idParam
-    AND rank = 1; 
+-- CREATE OR REPLACE FUNCTION disctinct_pilots_quantity(id_escuderia INT)
+--   RETURNS INT AS
+-- $$
+-- DECLARE
+--   quantity INT;
+-- BEGIN
+--   SELECT COUNT(DISTINCT DriverId) INTO quantity
+--   FROM Results
+--   WHERE ConstructorId = id_escuderia;
 
-  RETURN quantity;
-END;
-$$ LANGUAGE plpgsql;
+--   RETURN quantity;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
 
-SELECT S.status, COUNT(*) AS quantidade_resultados
-FROM RESULTS
-JOIN STATUS S ON S.STATUSID = RESULTS.STATUSID
-WHERE driverId = :DRIVER_ID 
-GROUP BY S.statusId
-ORDER BY quantidade_resultados DESC;
+-- CREATE OR REPLACE FUNCTION team_first_last_year_data(id_escuderia INT)
+--   RETURNS TEXT AS
+-- $$
+-- DECLARE
+--   first_year INT;
+--   last_year INT;
+-- BEGIN
+--   SELECT MIN(Races.Year), MAX(Races.Year) 
+--   INTO first_year, last_year
+--   FROM Races
+--   JOIN Results ON Races.RaceId = Results.RaceId
+--   WHERE Results.ConstructorId = id_escuderia;
+
+--   RETURN CONCAT(first_year, ',', last_year);
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
 
 
--- ADMIN OPERATIONS - INSERT NEW USER
-INSERT INTO USERS (login, password, type, idOriginal) VALUES (:login, MD5(:password), :type, null);
+-- -- PILOT REPORTS
 
--- ADMIN OVERVIEW
--- ADMIN_OVERVIEW_TOTAL_PILOTS
-SELECT COUNT(*) AS total_pilotos FROM Driver;
+-- -- o rollup usa o nome da corrida ao invés de id pois corridas sem nome não interessam pro nosso sistema
+-- --pusemos YEAR como primeiro parâmetro do rollup, assim conseguimos todas as vitórias por ano (ano fixado), o número total e o número daquele ano e corrida (que é sempre 1)
+-- SELECT
+-- 	COUNT(*) AS quantidade,
+-- 	YEAR as ano,
+-- 	R.Name as corrida,
+-- FROM Results RS
+-- JOIN Races R ON RS.RaceId = R.RaceId
+-- JOIN driver d ON RS.driverid = D.driverid
+-- WHERE
+--     RS.DriverId = :DRIVER_ID
+--     AND RS.PositionText = '1'
+-- GROUP BY ROLLUP (R.Year, R.Name) 
+-- ORDER BY R.Year ASC;
 
--- ADMIN_OVERVIEW_TOTAL_TEAMS
-SELECT COUNT(*) AS total_escuderias FROM Constructors;
+-- SELECT S.status, COUNT(*) AS quantidade_resultados
+-- FROM RESULTS
+-- JOIN STATUS S ON S.STATUSID = RESULTS.STATUSID
+-- WHERE driverId = :DRIVER_ID
+-- GROUP BY S.statusId
+-- ORDER BY quantidade_resultados DESC;
 
---ADMIN_OVERVIEW_TOTAL_RACES
-SELECT COUNT(*) AS total_corridas FROM Races;
+-- -- overview pilot
 
---ADMIN_OVERVIEW_TOTAL_SEASONS
-SELECT COUNT(DISTINCT year) AS total_temporadas FROM Races;
+-- CREATE OR REPLACE FUNCTION get_first_and_last_race_years_from_pilot(idParam INTEGER)
+-- RETURNS TEXT AS $$
+-- DECLARE
+--   firstYear INTEGER;
+--   lastYear INTEGER;
+-- BEGIN
+--   SELECT MIN(year), MAX(year)
+--   INTO firstYear, lastYear
+--   FROM results
+-- 	JOIN races ON results.raceid = races.raceid
+-- 	WHERE results.driverid = idParam;
 
--- ADMIN REPORTS
-SELECT S.Status as status, COUNT(*) AS quantity
-FROM Status S
-JOIN Results R ON R.StatusId = S.StatusId
-GROUP BY S.Status
-ORDER BY quantity DESC;
+--   RETURN CONCAT(firstYear, ',', lastYear);
+-- END;
+-- $$ LANGUAGE plpgsql;
 
-SELECT C.Name AS city_name,
-       A.IATACode AS iata_code,
-       A.Name AS airport_name,
-       A.Type AS airport_type,
-       ROUND( 
-		   CAST((earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) / 1000) as numeric), 2
-	   ) AS distance_km_rounded
-FROM Airports A
-JOIN GeoCities15K C ON 
-	ROUND( 
-		   CAST((earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) / 1000) as numeric), 2
-	   ) <= 100
-WHERE C.Name = :CITY_NAME AND
-      A.Type IN ('medium_airport', 'large_airport') 
-ORDER BY distance_km_rounded;
-CREATE INDEX IF NOT EXISTS INDEX_GEOCITIES_BY_COORDINATES ON GEOCITIES15K(LAT, LONG);
-CREATE INDEX IF NOT EXISTS INDEX_PILOTS_FULL_NAME ON DRIVER(FORENAME, SURNAME);
-CREATE INDEX IF NOT EXISTS INDEX_RACE_YEAR ON RACES(YEAR, NAME);
+-- CREATE OR REPLACE FUNCTION get_pilot_victories(idParam INTEGER)
+-- RETURNS INTEGER AS $$
+-- DECLARE
+--   quantity INTEGER;
+-- BEGIN
+--   SELECT COUNT(*)
+--   INTO quantity
+--   FROM RESULTS
+--   WHERE driverId = idParam
+--     AND rank = 1; 
 
-INSERT INTO DRIVER (driverref, number, code, forename, surname, dob, nationality)
-VALUES(:driverref, :number, :code, :forename, :surname, :dob, :nationality);
+--   RETURN quantity;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
-INSERT INTO CONSTRUCTORS(constructorref, name, nationality, url)
-VALUES(:constructorRef, :name, :nationality, :url);
+-- SELECT S.status, COUNT(*) AS quantidade_resultados
+-- FROM RESULTS
+-- JOIN STATUS S ON S.STATUSID = RESULTS.STATUSID
+-- WHERE driverId = :DRIVER_ID 
+-- GROUP BY S.statusId
+-- ORDER BY quantidade_resultados DESC;
 
-CREATE OR REPLACE FUNCTION verify_if_user_exists_in_driver()
-RETURNS TRIGGER AS $$
-DECLARE
-    v_driverref TEXT;
-BEGIN
-    -- Concatena "_d" com o driverref pra ver se o login (formatado) ja existe em users.
-    v_driverref := CONCAT(NEW.driverref, '_d');
+
+-- -- ADMIN OPERATIONS - INSERT NEW USER
+-- INSERT INTO USERS (login, password, type, idOriginal) VALUES (:login, MD5(:password), :type, null);
+
+-- -- ADMIN OVERVIEW
+-- -- ADMIN_OVERVIEW_TOTAL_PILOTS
+-- SELECT COUNT(*) AS total_pilotos FROM Driver;
+
+-- -- ADMIN_OVERVIEW_TOTAL_TEAMS
+-- SELECT COUNT(*) AS total_escuderias FROM Constructors;
+
+-- --ADMIN_OVERVIEW_TOTAL_RACES
+-- SELECT COUNT(*) AS total_corridas FROM Races;
+
+-- --ADMIN_OVERVIEW_TOTAL_SEASONS
+-- SELECT COUNT(DISTINCT year) AS total_temporadas FROM Races;
+
+-- -- ADMIN REPORTS
+-- SELECT S.Status as status, COUNT(*) AS quantity
+-- FROM Status S
+-- JOIN Results R ON R.StatusId = S.StatusId
+-- GROUP BY S.Status
+-- ORDER BY quantity DESC;
+
+-- SELECT C.Name AS city_name,
+--        A.IATACode AS iata_code,
+--        A.Name AS airport_name,
+--        A.Type AS airport_type,
+--        ROUND( 
+-- 		   CAST((earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) / 1000) as numeric), 2
+-- 	   ) AS distance_km_rounded
+-- FROM Airports A
+-- JOIN GeoCities15K C ON 
+-- 	ROUND( 
+-- 		   CAST((earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) / 1000) as numeric), 2
+-- 	   ) <= 100
+-- WHERE C.Name = :CITY_NAME AND
+--       A.Type IN ('medium_airport', 'large_airport') 
+-- ORDER BY distance_km_rounded;
+-- CREATE INDEX IF NOT EXISTS INDEX_GEOCITIES_BY_COORDINATES ON GEOCITIES15K(LAT, LONG);
+-- CREATE INDEX IF NOT EXISTS INDEX_PILOTS_FULL_NAME ON DRIVER(FORENAME, SURNAME);
+-- CREATE INDEX IF NOT EXISTS INDEX_RACE_YEAR ON RACES(YEAR, NAME);
+
+-- INSERT INTO DRIVER (driverref, number, code, forename, surname, dob, nationality)
+-- VALUES(:driverref, :number, :code, :forename, :surname, :dob, :nationality);
+
+-- INSERT INTO CONSTRUCTORS(constructorref, name, nationality, url)
+-- VALUES(:constructorRef, :name, :nationality, :url);
+
+-- CREATE OR REPLACE FUNCTION verify_if_user_exists_in_driver()
+-- RETURNS TRIGGER AS $$
+-- DECLARE
+--     v_driverref TEXT;
+-- BEGIN
+--     -- Concatena "_d" com o driverref pra ver se o login (formatado) ja existe em users.
+--     v_driverref := CONCAT(NEW.driverref, '_d');
     
-    IF EXISTS (
-        SELECT 1
-        FROM users
-        WHERE login = v_driverref
-    ) THEN
-        RAISE EXCEPTION 'Usuário já existe em Driver, pois foi achado em Users', NEW.driverref;
-    END IF;
+--     IF EXISTS (
+--         SELECT 1
+--         FROM users
+--         WHERE login = v_driverref
+--     ) THEN
+--         RAISE EXCEPTION 'Usuário já existe em Driver, pois foi achado em Users', NEW.driverref;
+--     END IF;
     
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_verify_if_user_exists_in_driver
-BEFORE INSERT ON driver
-FOR EACH ROW
-EXECUTE FUNCTION verify_if_user_exists_in_driver();
+-- CREATE TRIGGER trigger_verify_if_user_exists_in_driver
+-- BEFORE INSERT ON driver
+-- FOR EACH ROW
+-- EXECUTE FUNCTION verify_if_user_exists_in_driver();
 
-CREATE OR REPLACE FUNCTION verify_if_constructor_exists_in_user()
-RETURNS TRIGGER AS $$
-DECLARE
-    v_constructorref TEXT;
-BEGIN
-    -- Concatena "_c" com o constructorref pra ver se o login (formatado) ja existe em users.
-    v_constructorref := CONCAT(NEW.constructorref, '_c');
+-- CREATE OR REPLACE FUNCTION verify_if_constructor_exists_in_user()
+-- RETURNS TRIGGER AS $$
+-- DECLARE
+--     v_constructorref TEXT;
+-- BEGIN
+--     -- Concatena "_c" com o constructorref pra ver se o login (formatado) ja existe em users.
+--     v_constructorref := CONCAT(NEW.constructorref, '_c');
     
-    IF EXISTS (
-        SELECT 1
-        FROM users
-        WHERE login = v_constructorref
-    ) THEN
-        RAISE EXCEPTION 'Já existe o constructor na tabela Users %', NEW.constructorref;
-    END IF;
+--     IF EXISTS (
+--         SELECT 1
+--         FROM users
+--         WHERE login = v_constructorref
+--     ) THEN
+--         RAISE EXCEPTION 'Já existe o constructor na tabela Users %', NEW.constructorref;
+--     END IF;
     
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_verify_if_constructor_exists_in_user
-BEFORE INSERT ON constructors
-FOR EACH ROW
-EXECUTE FUNCTION verify_if_constructor_exists_in_user();
+-- CREATE TRIGGER trigger_verify_if_constructor_exists_in_user
+-- BEFORE INSERT ON constructors
+-- FOR EACH ROW
+-- EXECUTE FUNCTION verify_if_constructor_exists_in_user();
