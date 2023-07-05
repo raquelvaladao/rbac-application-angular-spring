@@ -7,12 +7,12 @@ import { PilotFirstLastRace } from '../autenticacao/model/PilotFirstLastRace';
 @Injectable({
   providedIn: 'root'
 })
-export class PilotServiceService {
-  PILOT_URL = 'http://localhost:8080/pilot'
-  OVERVIEW_ENDPOINT = '/overview'
+export class TeamServiceService {
+  TEAM_URL = 'http://localhost:8080/team'
+
   OVERVIEW_VICTORIES_ENDPOINT = '/overview/victories'
-  OVERVIEW_YEAR_RACE_ENDPOINT = '/overview/races'
-  REPORT_STATUS_ENDPOINT = '/report/status'
+  OVERVIEW_YEAR_DATA_ENDPOINT = '/overview/years-data'
+  OVERVIEW_PILOTS_ENDPOINT = '/overview/pilots'
   
   constructor(
     private http: HttpClient,
@@ -20,14 +20,14 @@ export class PilotServiceService {
     ) { }
 
   getFirstLastYear(): Observable<PilotFirstLastRace> {
-    return this.http.get<PilotFirstLastRace>(this.PILOT_URL.concat(this.OVERVIEW_YEAR_RACE_ENDPOINT));
+    return this.http.get<PilotFirstLastRace>(this.TEAM_URL.concat(this.OVERVIEW_YEAR_DATA_ENDPOINT));
   }
   getVictories() {
-    return this.http.get<PilotFirstLastRace>(this.PILOT_URL.concat(this.OVERVIEW_VICTORIES_ENDPOINT));
+    return this.http.get<PilotFirstLastRace>(this.TEAM_URL.concat(this.OVERVIEW_VICTORIES_ENDPOINT));
   }
 
-  getStatus() {
-    return this.http.get<PilotFirstLastRace>(this.PILOT_URL.concat(this.REPORT_STATUS_ENDPOINT));
+  getPilots() {
+    return this.http.get<PilotFirstLastRace>(this.TEAM_URL.concat(this.OVERVIEW_PILOTS_ENDPOINT));
   }
 
   openSnackBar(message: string, color: string) {

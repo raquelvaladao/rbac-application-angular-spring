@@ -6,14 +6,14 @@ import { HomeComponent } from "./navegacao/home/home.component";
 import { PilotOverviewComponent } from "./pilot/pilot-overview/pilot-overview.component";
 import { AdminOverviewComponent } from "./admin/admin-overview/admin-overview.component";
 import { AdminRegisterUserComponent } from "./admin/admin-register-user/admin-register-user.component";
-import { TeamReportsComponent } from "./team/team-reports/team-reports.component";
 import { TeamOverviewComponent } from "./team/team-overview/team-overview.component";
 import { AuthGuardGuard } from "./auth-guard.guard";
 import { ForbiddenComponent } from "./forbidden/forbidden.component";
 import { PositionComponent } from "./admin/admin-reports/position/position.component";
 import { CitiesComponent } from "./admin/admin-reports/cities/cities.component";
-import { VictoriesComponent } from "./pilot/pilot-reports/victories/victories.component";
-import { FirstLastRaceComponent } from "./pilot/pilot-reports/first-last-race/first-last-race.component";
+import { StatusComponent } from "./pilot/pilot-reports/status/status.component";
+import { TeamStatusComponent } from "./team/team-reports/team-status/team-status.component";
+import { TeamPilotsComponent } from "./team/team-reports/team-pilots/team-pilots.component";
 
 export const rootRouterConfig: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -61,12 +61,8 @@ export const rootRouterConfig: Routes = [
         path: "relatorios",
         children: [
           {
-            path: "vitorias",
-            component: VictoriesComponent,
-          },
-          {
-            path: "anos-corrida",
-            component: FirstLastRaceComponent,
+            path: "status",
+            component: StatusComponent,
           },
         ]
       },
@@ -82,7 +78,16 @@ export const rootRouterConfig: Routes = [
     children: [
       {
         path: "relatorios",
-        component: TeamReportsComponent,
+        children: [
+          {
+            path: "status",
+            component: TeamStatusComponent,
+          },
+          {
+            path: "pilotos",
+            component: TeamPilotsComponent,
+          },
+        ]
       },
       {
         path: "overview",

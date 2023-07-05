@@ -1,41 +1,44 @@
-<h3 class="display-5 mb-2 text-center">Overview</h3>
-<div class="container d-flex justify-content-center mt-5 mb-5">
-    <table mat-table [dataSource]="ELEMENT_DATA" class="mat-elevation-z8 demo-table">
+<h4 class="display-7 text-center">Overview do primeiro e último ano de dados de corrida</h4>
+<div class="container d-flex justify-content-center  mb-5">
+    <table mat-table *ngIf="data.length > 0" [dataSource]="data" class="mat-elevation-z8 demo-table">
         <!-- Informação -->
         <ng-container matColumnDef="demo-name">
-          <th mat-header-cell *matHeaderCellDef> Informação </th>
-          <td mat-cell *matCellDef="let element"> {{element.info}} </td>
+          <th mat-header-cell *matHeaderCellDef> Primeiro ano </th>
+          <td mat-cell *matCellDef="let element"> {{element.firstYear}} </td>
         </ng-container>
       
         <!-- Quantidade -->
         <ng-container matColumnDef="demo-symbol">
-          <th mat-header-cell *matHeaderCellDef> Quantidade </th>
-          <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+          <th mat-header-cell *matHeaderCellDef> Último ano </th>
+          <td mat-cell *matCellDef="let element"> {{element.lastYear}} </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 </div>
 
-<div class="container d-flex justify-content-center">
-    <table mat-table [dataSource]="ELEMENT_DATA_YEAR" class="mat-elevation-z8 demo-table">
-        <!-- Informação -->
+<h4 class="display-7 text-center">Overview de quantidade de pilotos distintos</h4>
+<div class="container d-flex justify-content-center mb-5">
+    <table mat-table *ngIf="datapil.length > 0" [dataSource]="datapil" class="mat-elevation-z8 demo-table-2">
+        <!-- Quantidade -->
         <ng-container matColumnDef="demo-name">
-          <th mat-header-cell *matHeaderCellDef> Informação </th>
-          <td mat-cell *matCellDef="let element"> {{element.info}} </td>
-        </ng-container>
-      
-        <!-- Primeiro ano -->
-        <ng-container matColumnDef="demo-symbol">
-          <th mat-header-cell *matHeaderCellDef> 1º ano </th>
+          <th mat-header-cell *matHeaderCellDef> Quantidade</th>
           <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
         </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsPil"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsPil;"></tr>
+      </table>
+</div>
 
-        <ng-container matColumnDef="demo-symbol-2">
-            <th mat-header-cell *matHeaderCellDef> Último ano </th>
-            <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
-          </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumnsYear"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumnsYear;"></tr>
+<h4 class="display-7 text-center">Overview de quantidade de vitórias</h4>
+<div class="container d-flex justify-content-center mb-5">
+    <table mat-table *ngIf="datavic.length > 0" [dataSource]="datavic" class="mat-elevation-z8 demo-table-2">
+        <!-- Quantidade -->
+        <ng-container matColumnDef="demo-name">
+          <th mat-header-cell *matHeaderCellDef> Quantidade</th>
+          <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsVic"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsVic;"></tr>
       </table>
 </div>

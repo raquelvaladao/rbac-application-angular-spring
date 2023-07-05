@@ -26,7 +26,6 @@ import localePt from '@angular/common/locales/pt';
 import { PilotOverviewComponent } from './pilot/pilot-overview/pilot-overview.component';
 import { AdminOverviewComponent } from './admin/admin-overview/admin-overview.component';
 import { TeamOverviewComponent } from './team/team-overview/team-overview.component';
-import { TeamReportsComponent } from './team/team-reports/team-reports.component';
 import { AdminRegisterUserComponent } from "./admin/admin-register-user/admin-register-user.component";
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar'; 
@@ -40,8 +39,10 @@ import { CitiesComponent } from './admin/admin-reports/cities/cities.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
-import { VictoriesComponent } from './pilot/pilot-reports/victories/victories.component';
-import { FirstLastRaceComponent } from './pilot/pilot-reports/first-last-race/first-last-race.component';
+import { StatusComponent } from './pilot/pilot-reports/status/status.component';
+import { RollupComponent } from './pilot/pilot-reports/rollup/rollup.component';
+import { TeamStatusComponent } from './team/team-reports/team-status/team-status.component';
+import { TeamPilotsComponent } from './team/team-reports/team-pilots/team-pilots.component';
 
 registerLocaleData(localePt);
 @NgModule({
@@ -61,14 +62,15 @@ registerLocaleData(localePt);
     PositionComponent,
 
     PilotOverviewComponent,
-    VictoriesComponent,
-    FirstLastRaceComponent,
 
     TeamOverviewComponent,
-    TeamReportsComponent,
     ForbiddenComponent,
     PositionComponent,
     CitiesComponent,
+    StatusComponent,
+    RollupComponent,
+    TeamStatusComponent,
+    TeamPilotsComponent,
     
   ],
   imports: [

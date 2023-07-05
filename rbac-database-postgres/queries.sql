@@ -161,17 +161,16 @@
 
 -- INSERT INTO USERS (login, password, type, IdOriginal) VALUES ('admin', MD5('admin'), 'ADMINISTRADOR', null);
 
--- -- TEAM REPORTS
--- SELECT 
--- 	CONCAT(D.Forename, ' ', D.Surname) AS pilot_name, 
--- 	COUNT(*) AS victories_on_team
--- FROM Results R
--- JOIN Driver D ON R.DriverId = D.DriverId
--- WHERE R.ConstructorId = 1 AND R.Position = 1 -- se já correu pela escuderia e se houve vitória
--- GROUP BY D.Forename, D.Surname				 -- contagem das vitórias daquele piloto
--- ORDER BY victories_on_team DESC;
+-- -- TEAM REPORTS  -- escuderia com contagem 0
+-- SELECT
+-- CONCAT(D.Forename, ' ', D.Surname) AS pilot_name,
+-- COUNT(CASE WHEN R.Position = 1 THEN 1 ELSE NULL END) AS victories
+-- FROM Driver D
+-- LEFT JOIN Results R ON D.DriverId = R.DriverId
+-- WHERE R.ConstructorId = 1
+-- GROUP BY D.DriverId, D.Forename, D.Surname
 
--- SELECT 
+-- SELECT -- 
 -- 	S.Status as status, 
 -- 	COUNT(*) AS quantity
 -- FROM Results R
@@ -179,6 +178,55 @@
 -- WHERE R.ConstructorId = :TEAM_ID
 -- GROUP BY S.Status
 -- ORDER BY quantity DESC;
+
+-- team overview
+-- CREATE OR REPLACE FUNCTION team_victories_quantity(id_escuderia INT)
+--   RETURNS INT AS
+-- $$
+-- DECLARE
+--   victories INT;
+-- BEGIN
+--   SELECT COUNT(*) INTO victories
+--   FROM Results
+--   WHERE ConstructorId = id_escuderia AND Position = 1;
+
+--   RETURN victories;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
+
+-- CREATE OR REPLACE FUNCTION disctinct_pilots_quantity(id_escuderia INT)
+--   RETURNS INT AS
+-- $$
+-- DECLARE
+--   quantity INT;
+-- BEGIN
+--   SELECT COUNT(DISTINCT DriverId) INTO quantity
+--   FROM Results
+--   WHERE ConstructorId = id_escuderia;
+
+--   RETURN quantity;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
+
+-- CREATE OR REPLACE FUNCTION team_first_last_year_data(id_escuderia INT)
+--   RETURNS TEXT AS
+-- $$
+-- DECLARE
+--   first_year INT;
+--   last_year INT;
+-- BEGIN
+--   SELECT MIN(Races.Year), MAX(Races.Year) 
+--   INTO first_year, last_year
+--   FROM Races
+--   JOIN Results ON Races.RaceId = Results.RaceId
+--   WHERE Results.ConstructorId = id_escuderia;
+
+--   RETURN CONCAT(first_year, ',', last_year);
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
 
 
 -- -- PILOT REPORTS
@@ -199,6 +247,49 @@
 -- GROUP BY ROLLUP (R.Year, R.Name) 
 -- ORDER BY R.Year ASC;
 
+-- SELECT S.status, COUNT(*) AS quantidade_resultados
+-- FROM RESULTS
+-- JOIN STATUS S ON S.STATUSID = RESULTS.STATUSID
+-- WHERE driverId = :DRIVER_ID
+-- GROUP BY S.statusId
+-- ORDER BY quantidade_resultados DESC;
+
+-- overview
+
+-- CREATE OR REPLACE FUNCTION get_first_and_last_race_years_from_pilot(idParam INTEGER)
+-- RETURNS TEXT AS $$
+-- DECLARE
+--   firstYear INTEGER;
+--   lastYear INTEGER;
+-- BEGIN
+--   SELECT MIN(year), MAX(year)
+--   INTO firstYear, lastYe		ar
+--   FROM results
+-- 	JOIN races ON results.raceid = races.raceid
+-- 	WHERE results.driverid = idParam;
+
+--   RETURN CONCAT(firstYear, ',', lastYear);
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+-- CREATE OR REPLACE FUNCTION get_pilot_victories(idParam INTEGER)
+-- RETURNS INTEGER AS $$
+-- DECLARE
+--   quantity INTEGER;
+-- BEGIN
+--   SELECT COUNT(*)
+--   INTO quantity
+--   FROM RESULTS
+--   WHERE driverId = idParam
+--     AND rank = 1; 
+
+--   RETURN quantity;
+-- END;
+-- $$ LANGUAGE plpgsql;
+-- SELECT statusId, COUNT(*) AS result_quantity
+-- FROM RESULTS
+-- WHERE driverId = 1
+-- GROUP BY statusId;
 
 
 -- -- ADMIN OPERATIONS - INSERT NEW USER
