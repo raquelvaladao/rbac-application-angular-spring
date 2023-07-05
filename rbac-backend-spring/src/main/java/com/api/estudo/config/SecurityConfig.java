@@ -90,10 +90,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200", "http://ec2-15-228-86-83.sa-east-1.compute.amazonaws.com"));
+        // config.setAllowedOrigins(List.of("http://localhost:4200", "http://ec2-15-228-86-83.sa-east-1.compute.amazonaws.com"));
         config.setAllowedMethods(Arrays.asList("GET","POST"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

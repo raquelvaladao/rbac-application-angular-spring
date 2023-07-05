@@ -626,6 +626,55 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION verify_if_user_exists_in_driver()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_driverref TEXT;
+BEGIN
+    -- Concatena "_d" com o driverref pra ver se o login (formatado) ja existe em users.
+    v_driverref := CONCAT(NEW.driverref, '_d');
+    
+    IF EXISTS (
+        SELECT 1
+        FROM users
+        WHERE login = v_driverref
+    ) THEN
+        RAISE EXCEPTION 'Usuário já existe em Driver, pois foi achado em Users', NEW.driverref;
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_verify_if_user_exists_in_driver
+BEFORE INSERT ON driver
+FOR EACH ROW
+EXECUTE FUNCTION verify_if_user_exists_in_driver();
+
+CREATE OR REPLACE FUNCTION verify_if_constructor_exists_in_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_constructorref TEXT;
+BEGIN
+    -- Concatena "_c" com o constructorref pra ver se o login (formatado) ja existe em users.
+    v_constructorref := CONCAT(NEW.constructorref, '_c');
+    
+    IF EXISTS (
+        SELECT 1
+        FROM users
+        WHERE login = v_constructorref
+    ) THEN
+        RAISE EXCEPTION 'Já existe o constructor na tabela Users %', NEW.constructorref;
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_verify_if_constructor_exists_in_user
+BEFORE INSERT ON constructors
+FOR EACH ROW
+EXECUTE FUNCTION verify_if_constructor_exists_in_user();
 
 select atualizar_serial('driver_driverid_seq', 'driver', 'driverid');
 select atualizar_serial('constructors_constructorid_seq', 'constructors', 'constructorid');
