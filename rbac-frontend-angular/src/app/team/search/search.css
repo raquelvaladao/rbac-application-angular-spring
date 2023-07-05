@@ -1,0 +1,35 @@
+.demo-table {
+  width: 100%;
+}
+
+.mat-column-cityName, .mat-column-airType, .mat-column-distanceRounded, .mat-column-airName, .mat-column-iataCode {
+padding-left: 16px;
+font-size: 20px;
+}
+
+.demo-toggles {
+display: flex;
+flex-direction: column;
+}
+
+.demo-toggles * {
+margin-bottom: 16px;
+}
+
+.demo-options {
+display: flex;
+flex-direction: column;
+width: 600px;
+}
+
+.demo-data * {
+  margin: 16px 0;
+}
+
+.demo-paginator {
+  width: 100%;
+}
+
+div.mat-elevation-z8 {
+  width: 100%;
+}

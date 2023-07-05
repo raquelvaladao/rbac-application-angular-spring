@@ -1,0 +1,86 @@
+<div class="container mt-5 mb-5">
+    <form class="form-container" [formGroup]="form" (submit)="submit()">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Cadastrar escuderia</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row  justify-content-center">
+            <div class="col-md-13">
+              <mat-form-field appearance="fill" class="full-width-field">
+                <mat-label>ConstructorRef</mat-label>
+                <input
+                  matInput
+                  placeholder="constructorRef
+                  formControlName="constructorRef
+                  required
+                />
+                <mat-error *ngIf="form.get('constructorRef')?.invalid">{{
+                  errosInput("constructorRef")
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          
+          <div class="row  justify-content-center">
+            <div class="col-md-13">
+              <mat-form-field appearance="fill" class="full-width-field">
+                <mat-label>Nome</mat-label>
+                <input
+                  matInput
+                  placeholder="Nome"
+                  formControlName="name"
+                  required
+                />
+                <mat-error *ngIf="form.get('name')?.invalid">{{
+                  errosInput("name")
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row  justify-content-center">
+            <div class="col-md-13">
+              <mat-form-field appearance="fill" class="full-width-field">
+                <mat-label>Nacionalidade</mat-label>
+                <input
+                  matInput
+                  placeholder="Nacionalidade"
+                  formControlName="nationality"
+                  required
+                />
+                <mat-error *ngIf="form.get('nationality')?.invalid">{{
+                  errosInput("nationality")
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row  justify-content-center">
+            <div class="col-md-13">
+              <mat-form-field appearance="fill" class="full-width-field">
+                <mat-label>URL</mat-label>
+                <input
+                  matInput
+                  placeholder="URL"
+                  formControlName="url"
+                  required
+                />
+                <mat-error *ngIf="form.get('url')?.invalid">{{
+                  errosInput("url")
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  
+
+        </mat-card-content>
+        <mat-card-actions>
+          <button type="submit" mat-raised-button="" color="primary">Enviar</button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+    </div>
+  
+  

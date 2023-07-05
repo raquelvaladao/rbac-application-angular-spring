@@ -14,6 +14,8 @@ import { CitiesComponent } from "./admin/admin-reports/cities/cities.component";
 import { StatusComponent } from "./pilot/pilot-reports/status/status.component";
 import { TeamStatusComponent } from "./team/team-reports/team-status/team-status.component";
 import { TeamPilotsComponent } from "./team/team-reports/team-pilots/team-pilots.component";
+import { AdminRegisterTeamComponent } from "./admin/admin-register-team/admin-register-team.component";
+import { SearchComponent } from "./team/search/search.component";
 
 export const rootRouterConfig: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -49,7 +51,16 @@ export const rootRouterConfig: Routes = [
       },
       {
         path: "criar",
-        component: AdminRegisterUserComponent,
+        children: [
+          {
+            path: "piloto",
+            component: AdminRegisterUserComponent,
+          },
+          {
+            path: "escuderia",
+            component: AdminRegisterTeamComponent,
+          },
+        ]
       },
     ],
   },
@@ -92,6 +103,10 @@ export const rootRouterConfig: Routes = [
       {
         path: "overview",
         component: TeamOverviewComponent,
+      },
+      {
+        path: "buscar",
+        component: SearchComponent,
       },
     ],
   },

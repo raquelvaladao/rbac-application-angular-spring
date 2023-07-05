@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { PilotFirstLastRace } from '../autenticacao/model/PilotFirstLastRace';
+import { PilotSearch } from '../autenticacao/model/PilotSearch';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class TeamServiceService {
   
   REPORT_PILOTS_ENDPOINT = '/report/pilots'
   REPORT_STATUS_ENDPOINT = '/report/status'
-  // OVERVIEW_PILOTS_ENDPOINT = '/overview/pilots'
+  SEARCH_PILOT_ENDPOINT = '/search/pilot'
+  
 
   constructor(
     private http: HttpClient,
@@ -38,6 +40,13 @@ export class TeamServiceService {
     return this.http.get<PilotFirstLastRace>(this.TEAM_URL.concat(this.REPORT_STATUS_ENDPOINT));
   }
 
+  getPilotsReport() {
+    return this.http.get<PilotFirstLastRace>(this.TEAM_URL.concat(this.REPORT_PILOTS_ENDPOINT));
+  }
+
+  getPilotSearch(searchTerm: string): Observable<PilotSearch[]> {
+    return this.http.get<PilotSearch[]>(this.TEAM_URL.concat(this.SEARCH_PILOT_ENDPOINT).concat('?forename=').concat(searchTerm));
+  }
 
   openSnackBar(message: string, color: string) {
     this._snackBar.open(message, 'Fechar', {

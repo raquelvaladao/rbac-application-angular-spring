@@ -43,6 +43,8 @@ import { StatusComponent } from './pilot/pilot-reports/status/status.component';
 import { RollupComponent } from './pilot/pilot-reports/rollup/rollup.component';
 import { TeamStatusComponent } from './team/team-reports/team-status/team-status.component';
 import { TeamPilotsComponent } from './team/team-reports/team-pilots/team-pilots.component';
+import { AdminRegisterTeamComponent } from './admin/admin-register-team/admin-register-team.component';
+import { SearchComponent } from './team/search/search.component';
 
 registerLocaleData(localePt);
 @NgModule({
@@ -71,6 +73,8 @@ registerLocaleData(localePt);
     RollupComponent,
     TeamStatusComponent,
     TeamPilotsComponent,
+    AdminRegisterTeamComponent,
+    SearchComponent,
     
   ],
   imports: [

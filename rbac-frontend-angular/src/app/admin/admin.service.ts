@@ -10,12 +10,14 @@ import { CityReport } from '../autenticacao/model/CityReport';
   providedIn: 'root'
 })
 export class AdminService {
+  
   constructor(
     private http: HttpClient,
     private _snackBar: MatSnackBar,
     ) { }
 
   ADMIN_URL = 'http://localhost:8080/admin'
+  NEW_TEAM_ENDPOINT = '/tem'
   NEW_PILOT_ENDPOINT = '/pilot'
   OVERVIEW_ENDPOINT = '/overview'
   REPORT_POSITION_ENDPOINT = '/report/position'
@@ -36,6 +38,19 @@ export class AdminService {
   
   registerNewPilot(request: any) {
     this.http.post(this.ADMIN_URL.concat(this.NEW_PILOT_ENDPOINT), request).subscribe({
+      next: () => {
+        this.openSnackBar('Piloto criado com sucesso', 'green-snackbar');
+      },
+      error: (error) => {
+        if(error['status'] != '201'){
+          this.openSnackBar(error.error.message, 'red-snackbar');
+        }
+      },
+    });
+  }
+
+  registerNewTeam(request: any) {
+    this.http.post(this.ADMIN_URL.concat(this.NEW_TEAM_ENDPOINT), request).subscribe({
       next: () => {
         this.openSnackBar('Piloto criado com sucesso', 'green-snackbar');
       },

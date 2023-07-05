@@ -161,6 +161,15 @@
 
 -- INSERT INTO USERS (login, password, type, IdOriginal) VALUES ('admin', MD5('admin'), 'ADMINISTRADOR', null);
 
+
+-- TEAM SEARCH
+-- SELECT CONCAT(D.Forename, ' ', D.Surname) AS full_name, D.DOB AS date_of_birth, D.Nationality
+-- FROM Driver D
+-- JOIN Results R ON D.DriverId = R.DriverId
+-- JOIN Constructors C ON R.ConstructorId = C.ConstructorId
+-- WHERE D.Forename = :FORENAME
+--   AND C.ConstructorId = :TEAM;
+
 -- -- TEAM REPORTS  -- escuderia com contagem 0
 -- SELECT
 -- CONCAT(D.Forename, ' ', D.Surname) AS pilot_name,
@@ -168,7 +177,8 @@
 -- FROM Driver D
 -- LEFT JOIN Results R ON D.DriverId = R.DriverId
 -- WHERE R.ConstructorId = 1
--- GROUP BY D.DriverId, D.Forename, D.Surname;
+-- GROUP BY D.DriverId, D.Forename, D.Surname
+-- ORDER BY victories DESC;
 
 -- SELECT -- 
 -- 	S.Status as status, 
