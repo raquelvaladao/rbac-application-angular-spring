@@ -32,7 +32,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres-data-vol:/var/lib/postgresql/data                                     # "local" volume
+      - volume-new:/var/lib/postgresql/data                                     # "local" volume
       - ./rbac-database-postgres/init.sql:/docker-entrypoint-initdb.d/init.sql     # init.sql with commands to populate db and create schemas
       - ./rbac-database-postgres/csv/:/csv                                         # CSV folders mapped to container to be used by init.sql for population
     networks:
@@ -51,7 +51,7 @@ services:
       - backend-database-network
 
 volumes:
-  postgres-data-vol:
+  volume-new:
     external: false
 
 networks:

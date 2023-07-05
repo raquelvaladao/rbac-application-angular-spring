@@ -16,6 +16,7 @@ import { TeamStatusComponent } from "./team/team-reports/team-status/team-status
 import { TeamPilotsComponent } from "./team/team-reports/team-pilots/team-pilots.component";
 import { AdminRegisterTeamComponent } from "./admin/admin-register-team/admin-register-team.component";
 import { SearchComponent } from "./team/search/search.component";
+import { RollupComponent } from "./pilot/pilot-reports/rollup/rollup.component";
 
 export const rootRouterConfig: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -74,6 +75,10 @@ export const rootRouterConfig: Routes = [
           {
             path: "status",
             component: StatusComponent,
+          },
+          {
+            path: "vitorias",
+            component: RollupComponent,
           },
         ]
       },

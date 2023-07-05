@@ -533,3 +533,99 @@ INSERT INTO USERS (login, password, type, IdOriginal) VALUES ('admin', MD5('admi
 
 CREATE EXTENSION IF NOT EXISTS Cube;
 CREATE EXTENSION IF NOT EXISTS EarthDistance;
+
+
+
+CREATE OR REPLACE FUNCTION team_victories_quantity(id_escuderia INT)
+  RETURNS INT AS
+$$
+DECLARE
+  victories INT;
+BEGIN
+  SELECT COUNT(*) INTO victories
+  FROM Results
+  WHERE ConstructorId = id_escuderia AND Position = 1;
+
+  RETURN victories;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION disctinct_pilots_quantity(id_escuderia INT)
+  RETURNS INT AS
+$$
+DECLARE
+  quantity INT;
+BEGIN
+  SELECT COUNT(DISTINCT DriverId) INTO quantity
+  FROM Results
+  WHERE ConstructorId = id_escuderia;
+
+  RETURN quantity;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION team_first_last_year_data(id_escuderia INT)
+  RETURNS TEXT AS
+$$
+DECLARE
+  first_year INT;
+  last_year INT;
+BEGIN
+  SELECT MIN(Races.Year), MAX(Races.Year) 
+  INTO first_year, last_year
+  FROM Races
+  JOIN Results ON Races.RaceId = Results.RaceId
+  WHERE Results.ConstructorId = id_escuderia;
+
+  RETURN CONCAT(first_year, ',', last_year);
+END;
+$$
+LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_first_and_last_race_years_from_pilot(idParam INTEGER)
+RETURNS TEXT AS $$
+DECLARE
+  firstYear INTEGER;
+  lastYear INTEGER;
+BEGIN
+  SELECT MIN(year), MAX(year)
+  INTO firstYear, lastYear
+  FROM results
+	JOIN races ON results.raceid = races.raceid
+	WHERE results.driverid = idParam;
+
+  RETURN CONCAT(firstYear, ',', lastYear);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_pilot_victories(idParam INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+  quantity INTEGER;
+BEGIN
+  SELECT COUNT(*)
+  INTO quantity
+  FROM RESULTS
+  WHERE driverId = idParam
+    AND rank = 1; 
+
+  RETURN quantity;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION atualizar_serial(seq regclass, nome_tabela regclass, nome_coluna_id text)
+RETURNS VOID AS $$
+DECLARE
+    id_maximo INTEGER;
+BEGIN
+    EXECUTE format('SELECT MAX(%I) FROM %I', nome_coluna_id, nome_tabela) INTO id_maximo;
+    EXECUTE format('SELECT setval(%L, %s)', seq, id_maximo + 1);
+END;
+$$ LANGUAGE plpgsql;
+
+
+select atualizar_serial('driver_driverid_seq', 'driver', 'driverid');
+select atualizar_serial('constructors_constructorid_seq', 'constructors', 'constructorid');

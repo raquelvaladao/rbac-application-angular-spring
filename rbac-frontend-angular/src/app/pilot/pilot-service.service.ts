@@ -12,7 +12,9 @@ export class PilotServiceService {
   OVERVIEW_ENDPOINT = '/overview'
   OVERVIEW_VICTORIES_ENDPOINT = '/overview/victories'
   OVERVIEW_YEAR_RACE_ENDPOINT = '/overview/races'
+
   REPORT_STATUS_ENDPOINT = '/report/status'
+  REPORT_VICTORIES_ENDPOINT = '/report/victories'
   
   constructor(
     private http: HttpClient,
@@ -28,6 +30,10 @@ export class PilotServiceService {
 
   getStatus() {
     return this.http.get<PilotFirstLastRace>(this.PILOT_URL.concat(this.REPORT_STATUS_ENDPOINT));
+  }
+
+  getRollupVictories() {
+    return this.http.get<any>(this.PILOT_URL.concat(this.REPORT_VICTORIES_ENDPOINT));
   }
 
   openSnackBar(message: string, color: string) {

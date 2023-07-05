@@ -17,7 +17,7 @@ export class AdminService {
     ) { }
 
   ADMIN_URL = 'http://localhost:8080/admin'
-  NEW_TEAM_ENDPOINT = '/tem'
+  NEW_TEAM_ENDPOINT = '/team'
   NEW_PILOT_ENDPOINT = '/pilot'
   OVERVIEW_ENDPOINT = '/overview'
   REPORT_POSITION_ENDPOINT = '/report/position'
@@ -52,7 +52,7 @@ export class AdminService {
   registerNewTeam(request: any) {
     this.http.post(this.ADMIN_URL.concat(this.NEW_TEAM_ENDPOINT), request).subscribe({
       next: () => {
-        this.openSnackBar('Piloto criado com sucesso', 'green-snackbar');
+        this.openSnackBar('Escuderia criada com sucesso', 'green-snackbar');
       },
       error: (error) => {
         if(error['status'] != '201'){

@@ -2,7 +2,7 @@
 <div class="container d-flex justify-content-center mt-5 mb-5">
     <form class="form-container">
         <mat-form-field appearance="outline" [style.width.px]=400>
-            <mat-label>Insira o nome de um piloto e pressione ENTER</mat-label>
+            <mat-label>Insira o primeiro nome de um piloto e pressione ENTER</mat-label>
             <input matInput [(ngModel)]="searchTerm" name="searchTerm" (keydown.enter)="getData()"/>
             <mat-icon matPrefix>search</mat-icon>
         </mat-form-field>

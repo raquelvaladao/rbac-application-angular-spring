@@ -161,6 +161,19 @@
 
 -- INSERT INTO USERS (login, password, type, IdOriginal) VALUES ('admin', MD5('admin'), 'ADMINISTRADOR', null);
 
+-- CREATE OR REPLACE FUNCTION atualizar_serial(seq regclass, nome_tabela regclass, nome_coluna_id text)
+-- RETURNS VOID AS $$
+-- DECLARE
+--     id_maximo INTEGER;
+-- BEGIN
+--     EXECUTE format('SELECT MAX(%I) FROM %I', nome_coluna_id, nome_tabela) INTO id_maximo;
+--     EXECUTE format('SELECT setval(%L, %s)', seq, id_maximo + 1);
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+
+-- select atualizar_serial('driver_driverid_seq', 'driver', 'driverid');
+-- select atualizar_serial('constructors_constructorid_seq', 'constructors', 'constructorid');
 
 -- TEAM SEARCH
 -- SELECT CONCAT(D.Forename, ' ', D.Surname) AS full_name, D.DOB AS date_of_birth, D.Nationality
@@ -175,12 +188,12 @@
 -- CONCAT(D.Forename, ' ', D.Surname) AS pilot_name,
 -- COUNT(CASE WHEN R.Position = 1 THEN 1 ELSE NULL END) AS victories
 -- FROM Driver D
--- LEFT JOIN Results R ON D.DriverId = R.DriverId
--- WHERE R.ConstructorId = 1
+-- JOIN Results R ON D.DriverId = R.DriverId
+-- WHERE R.ConstructorId = :TEAM_ID
 -- GROUP BY D.DriverId, D.Forename, D.Surname
 -- ORDER BY victories DESC;
 
--- SELECT -- 
+-- SELECT
 -- 	S.Status as status, 
 -- 	COUNT(*) AS quantity
 -- FROM Results R
@@ -253,7 +266,6 @@
 -- WHERE
 --     RS.DriverId = :DRIVER_ID
 --     AND RS.PositionText = '1'
--- 	AND d.forename is not null
 -- GROUP BY ROLLUP (R.Year, R.Name) 
 -- ORDER BY R.Year ASC;
 
@@ -264,7 +276,7 @@
 -- GROUP BY S.statusId
 -- ORDER BY quantidade_resultados DESC;
 
--- overview
+-- overview pilot
 
 -- CREATE OR REPLACE FUNCTION get_first_and_last_race_years_from_pilot(idParam INTEGER)
 -- RETURNS TEXT AS $$
@@ -273,7 +285,7 @@
 --   lastYear INTEGER;
 -- BEGIN
 --   SELECT MIN(year), MAX(year)
---   INTO firstYear, lastYe		ar
+--   INTO firstYear, lastYear
 --   FROM results
 -- 	JOIN races ON results.raceid = races.raceid
 -- 	WHERE results.driverid = idParam;
@@ -296,10 +308,13 @@
 --   RETURN quantity;
 -- END;
 -- $$ LANGUAGE plpgsql;
--- SELECT statusId, COUNT(*) AS result_quantity
+
+-- SELECT S.status, COUNT(*) AS quantidade_resultados
 -- FROM RESULTS
--- WHERE driverId = 1
--- GROUP BY statusId;
+-- JOIN STATUS S ON S.STATUSID = RESULTS.STATUSID
+-- WHERE driverId = :DRIVER_ID 
+-- GROUP BY S.statusId
+-- ORDER BY quantidade_resultados DESC;
 
 
 -- -- ADMIN OPERATIONS - INSERT NEW USER
@@ -318,9 +333,6 @@
 -- --ADMIN_OVERVIEW_TOTAL_SEASONS
 -- SELECT COUNT(DISTINCT year) AS total_temporadas FROM Races;
 
--- --ADMIN_REPORT_POSITION_QUANTITY
--- SELECT position, COUNT(*) AS quantity  FROM Results GROUP BY position ORDER BY position ASC;
-
 -- -- ADMIN REPORTS
 -- SELECT S.Status as status, COUNT(*) AS quantity
 -- FROM Status S
@@ -336,10 +348,10 @@
 -- 		   CAST((earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) / 1000) as numeric), 2
 -- 	   ) AS distance_km_rounded
 -- FROM Airports A
--- JOIN GeoCities15K C ON A.City = C.Name
--- WHERE C.Name = 'São Paulo' AND
---       A.Type IN ('medium_airport', 'large_airport') AND
---       ROUND( 
+-- JOIN GeoCities15K C ON 
+-- 	ROUND( 
 -- 		   CAST((earth_distance(ll_to_earth(C.Lat, C.Long), ll_to_earth(A.LatDeg, A.LongDeg)) / 1000) as numeric), 2
 -- 	   ) <= 100
+-- WHERE C.Name = :CITY_NAME AND
+--       A.Type IN ('medium_airport', 'large_airport') 
 -- ORDER BY distance_km_rounded;
