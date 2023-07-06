@@ -18,6 +18,6 @@ docker compose up -d
 - Login with admin user type:
   - login: admin, password: admin
 - Login with team user type (any user from table Users where the login is its login and the password is login_c):
-  - login: <team_login>_c, password: <team>
+  - login: <team_name_login>_c, password: team_name
 - Login with pilot user type (any user from table Users where the login is its login and the password is login_d):
- - login: <pilot_login>_d, password: <pilot>
+ - login: <pilot_name_login>_d, password: pilot_name
